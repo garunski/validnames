@@ -5,6 +5,7 @@
 ### 1. **Database Schema Inconsistencies**
 
 **Issue**: Missing database models referenced in later phases
+
 - `EmailRateLimit` model (Phase 6) not included in Phase 1
 - `EmailLog` model (Phase 9) not included in Phase 1
 - User model relations incomplete
@@ -19,7 +20,7 @@ model EmailRateLimit {
   type      String   // 'verification' or 'passwordReset'
   ipAddress String?
   createdAt DateTime @default(now())
-  
+
   @@index([email, type, createdAt])
   @@index([ipAddress, type, createdAt])
   @@map("email_rate_limits")
@@ -34,9 +35,9 @@ model EmailLog {
   error     String?
   metadata  Json?
   createdAt DateTime @default(now())
-  
+
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
-  
+
   @@index([type, createdAt])
   @@index([email, createdAt])
   @@index([status, createdAt])
@@ -46,7 +47,7 @@ model EmailLog {
 // Update User model relations
 model User {
   // ... existing fields ...
-  
+
   // Relations
   emailVerificationTokens EmailVerificationToken[]
   passwordResetTokens     PasswordResetToken[]
@@ -59,6 +60,7 @@ model User {
 ### 2. **Missing Dependencies**
 
 **Issue**: Some dependencies not listed in Phase 1
+
 - `react-hot-toast` for toast notifications (Phase 7)
 - `bcryptjs` for password hashing (Phase 3)
 
@@ -72,6 +74,7 @@ npm install --save-dev @types/crypto @types/bcryptjs
 ### 3. **Inconsistent File Paths**
 
 **Issue**: Some file paths don't match existing project structure
+
 - Using `@/database/client` instead of `@/lib/prisma`
 - Missing proper import paths for existing components
 
@@ -79,15 +82,16 @@ npm install --save-dev @types/crypto @types/bcryptjs
 
 ```typescript
 // Change from:
-import { prisma } from '@/database/client';
+import { prisma } from "@/database/client";
 
 // To:
-import { prisma } from '@/lib/prisma';
+import { prisma } from "@/lib/prisma";
 ```
 
 ### 4. **Missing Error Handling in API Routes**
 
 **Issue**: API routes don't include comprehensive error handling
+
 - Missing Zod validation error handling
 - Missing proper HTTP status codes
 - Missing structured error responses
@@ -95,7 +99,7 @@ import { prisma } from '@/lib/prisma';
 **Solution**: Add to all API routes:
 
 ```typescript
-import { z } from 'zod';
+import { z } from "zod";
 
 export async function POST(req: NextRequest) {
   try {
@@ -105,18 +109,18 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { 
-          error: 'Validation failed', 
-          details: error.errors.map(e => e.message) 
+        {
+          error: "Validation failed",
+          details: error.errors.map((e) => e.message),
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
-    
-    console.error('API error:', error);
+
+    console.error("API error:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
 }
@@ -125,6 +129,7 @@ export async function POST(req: NextRequest) {
 ### 5. **Missing Environment Variables**
 
 **Issue**: Some environment variables referenced but not documented
+
 - `NODE_ENV` validation
 - Optional variables for development
 
@@ -143,6 +148,7 @@ NODE_ENV=development
 ### 6. **Incomplete Token Cleanup**
 
 **Issue**: No automatic cleanup of expired tokens
+
 - Tokens accumulate in database
 - No scheduled cleanup process
 
@@ -152,7 +158,7 @@ NODE_ENV=development
 // Add to tokenOperations.ts
 export async function cleanupExpiredTokens(): Promise<void> {
   const now = new Date();
-  
+
   await Promise.all([
     prisma.emailVerificationToken.deleteMany({
       where: { expiresAt: { lt: now } },
@@ -167,6 +173,7 @@ export async function cleanupExpiredTokens(): Promise<void> {
 ### 7. **Missing Loading States**
 
 **Issue**: Frontend pages don't include proper loading states
+
 - No skeleton loaders
 - No disabled states during API calls
 
@@ -193,6 +200,7 @@ try {
 ### 8. **Incomplete Security Measures**
 
 **Issue**: Missing security headers and CSRF protection
+
 - No CSRF tokens for sensitive operations
 - Missing security headers for email routes
 
@@ -201,19 +209,20 @@ try {
 ```typescript
 // Add CSRF protection
 export async function generateCSRFToken(): Promise<string> {
-  return randomBytes(32).toString('hex');
+  return randomBytes(32).toString("hex");
 }
 
 // Add to API routes
-const csrfToken = req.headers.get('x-csrf-token');
+const csrfToken = req.headers.get("x-csrf-token");
 if (!csrfToken || !validateCSRFToken(csrfToken)) {
-  return NextResponse.json({ error: 'Invalid CSRF token' }, { status: 403 });
+  return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403 });
 }
 ```
 
 ### 9. **Missing Accessibility Features**
 
 **Issue**: Email templates and forms lack accessibility
+
 - No ARIA labels
 - No keyboard navigation support
 - No screen reader support
@@ -230,7 +239,7 @@ if (!csrfToken || !validateCSRFToken(csrfToken)) {
 />
 
 // Add to email templates
-<Button 
+<Button
   href={verificationLink}
   style={emailStyles.button}
   aria-label="Verify email address"
@@ -242,6 +251,7 @@ if (!csrfToken || !validateCSRFToken(csrfToken)) {
 ### 10. **Incomplete Manual Testing Coverage**
 
 **Issue**: Manual testing phase doesn't cover all scenarios
+
 - Missing edge case testing
 - Missing performance validation
 - Missing security validation
@@ -259,42 +269,50 @@ if (!csrfToken || !validateCSRFToken(csrfToken)) {
 ## Recommended Updates
 
 ### Phase 1 Updates:
+
 1. Add missing database models
 2. Update dependencies list
 3. Add environment validation
 4. Include proper file paths
 
 ### Phase 2 Updates:
+
 1. Add token cleanup functions
 2. Include proper error handling
 3. Add logging integration
 
 ### Phase 3 Updates:
+
 1. Add comprehensive error handling
 2. Include CSRF protection
 3. Add proper validation
 
 ### Phase 5 Updates:
+
 1. Add loading states
 2. Include accessibility features
 3. Add proper error boundaries
 
 ### Phase 6 Updates:
+
 1. Add CSRF protection
 2. Include security headers
 3. Add IP-based rate limiting
 
 ### Phase 7 Updates:
+
 1. Add accessibility support
 2. Include proper error messages
 3. Add retry mechanisms
 
 ### Phase 8 Updates:
+
 1. Add comprehensive manual testing scenarios
 2. Include performance validation
 3. Add security validation
 
 ### Phase 9 Updates:
+
 1. Add accessibility to email templates
 2. Include comprehensive logging
 3. Add monitoring dashboard
@@ -313,4 +331,4 @@ if (!csrfToken || !validateCSRFToken(csrfToken)) {
 3. Implement comprehensive error handling
 4. Add security and accessibility features
 5. Create comprehensive manual testing scenarios
-6. Add monitoring and logging 
+6. Add monitoring and logging

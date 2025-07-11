@@ -9,14 +9,22 @@ datasource db {
 }
 
 model User {
-  id           String        @id @default(cuid())
-  email        String        @unique
-  name         String?
-  passwordHash String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  applications Application[]
-  settings     UserSettings?
+  id                String        @id @default(cuid())
+  email             String        @unique
+  name              String?
+  passwordHash      String?
+  emailVerified     Boolean       @default(false)
+  emailVerifiedAt   DateTime?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Relations
+  applications              Application[]
+  settings                  UserSettings?
+  emailVerificationTokens   EmailVerificationToken[]
+  passwordResetTokens       PasswordResetToken[]
+  emailRateLimits           EmailRateLimit[]
+  emailLogs                 EmailLog[]
 
   @@map("users")
 }
@@ -128,4 +136,67 @@ model BackgroundJob {
   @@index([userId])
   @@index([applicationId])
   @@index([categoryId])
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([token])
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("email_verification_tokens")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([token])
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("password_reset_tokens")
+}
+
+model EmailRateLimit {
+  id        String   @id @default(cuid())
+  email     String
+  type      String   // 'verification' or 'passwordReset'
+  ipAddress String?
+  createdAt DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  
+  @@index([email, type, createdAt])
+  @@index([ipAddress, type, createdAt])
+  @@map("email_rate_limits")
+}
+
+model EmailLog {
+  id        String   @id @default(cuid())
+  type      String   // 'verification', 'password_reset', 'welcome'
+  email     String
+  userId    String?
+  status    String   // 'success', 'error'
+  error     String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+  
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@index([type, createdAt])
+  @@index([email, createdAt])
+  @@index([status, createdAt])
+  @@map("email_logs")
 }

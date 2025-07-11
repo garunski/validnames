@@ -22,18 +22,21 @@ You are continuing the implementation of the email verification and password res
 ## ASSESSMENT STEPS
 
 ### 1. Review Current State
+
 - Check what has been implemented so far
 - Review the `email-integration-phases/` folder structure
 - Read `email-integration-phases/IMPROVEMENTS_NEEDED.md` for critical fixes
 - Examine the current codebase to understand what's been done
 
 ### 2. Identify Current Phase
+
 - Check which phase files exist and their content
 - Look for implementation artifacts in the codebase
 - Determine the last completed phase
 - Identify any incomplete tasks or issues
 
 ### 3. Validate Previous Work
+
 - Ensure all previous phases are properly implemented
 - Check that critical fixes from `IMPROVEMENTS_NEEDED.md` are applied
 - Verify file sizes are under 150 lines
@@ -42,6 +45,7 @@ You are continuing the implementation of the email verification and password res
 ## CONTINUATION STRATEGY
 
 ### If Previous Phase is Complete
+
 1. **Read the next phase file** from `email-integration-phases/`
 2. **Review dependencies** from previous phases
 3. **Implement the phase** following the detailed instructions
@@ -49,12 +53,14 @@ You are continuing the implementation of the email verification and password res
 5. **Validate against checklist** in the phase file
 
 ### If Previous Phase is Incomplete
+
 1. **Complete any unfinished tasks** from the previous phase
 2. **Fix any issues** or errors found
 3. **Test the completed phase** thoroughly
 4. **Then proceed** to the next phase
 
 ### If Issues Found
+
 1. **Document the issues** clearly
 2. **Apply fixes** from `IMPROVEMENTS_NEEDED.md`
 3. **Test the fixes** manually
@@ -63,6 +69,7 @@ You are continuing the implementation of the email verification and password res
 ## PHASE IMPLEMENTATION GUIDELINES
 
 ### For Each Phase:
+
 1. **Read the phase file completely** before starting
 2. **Understand all tasks and requirements**
 3. **Check for dependencies** from previous phases
@@ -74,6 +81,7 @@ You are continuing the implementation of the email verification and password res
 9. **Commit changes** with descriptive message
 
 ### File Implementation:
+
 - **Database**: Follow Prisma schema patterns
 - **API Routes**: Use Next.js 15 App Router patterns
 - **Components**: Use existing `src/primitives/` components
@@ -83,12 +91,14 @@ You are continuing the implementation of the email verification and password res
 ## TECHNICAL REQUIREMENTS
 
 ### Database Operations
+
 - Use Prisma ORM with proper error handling
 - Follow existing schema patterns
 - Add proper indexes and constraints
 - Use meaningful field names and types
 
 ### API Routes
+
 - Use Next.js 15 API routes
 - Implement proper error handling
 - Use Zod validation for all inputs
@@ -96,6 +106,7 @@ You are continuing the implementation of the email verification and password res
 - Use appropriate HTTP status codes
 
 ### Frontend Components
+
 - Use existing `src/primitives/` components
 - Implement proper loading states
 - Add error boundaries
@@ -103,6 +114,7 @@ You are continuing the implementation of the email verification and password res
 - Follow existing styling patterns
 
 ### Email Integration
+
 - Use Resend with React Email templates
 - Implement proper error handling
 - Add rate limiting and security
@@ -112,6 +124,7 @@ You are continuing the implementation of the email verification and password res
 ## QUALITY ASSURANCE
 
 ### Before Moving to Next Phase:
+
 - [ ] All tasks in current phase completed
 - [ ] Manual testing passed
 - [ ] Error handling works properly
@@ -128,6 +141,7 @@ You are continuing the implementation of the email verification and password res
 ## CODE QUALITY AND VERSION CONTROL
 
 ### Phase Completion Workflow:
+
 1. **Complete Implementation**: Finish all tasks in the current phase
 2. **Manual Testing**: Test all functionality thoroughly
 3. **Code Formatting**: Run `npx prettier --write .` to ensure consistent formatting
@@ -137,6 +151,7 @@ You are continuing the implementation of the email verification and password res
 7. **Commit Changes**: Use descriptive commit messages following conventional commits
 
 ### Commit Message Guidelines:
+
 - Use conventional commit format: `type: description`
 - Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
 - Keep descriptions concise but descriptive
@@ -148,6 +163,7 @@ You are continuing the implementation of the email verification and password res
   - `feat: complete phase 6 - security middleware and rate limiting`
 
 ### Quality Gates:
+
 - **No TypeScript errors** before committing
 - **No Prettier formatting issues** before committing
 - **All manual tests pass** before committing
@@ -156,6 +172,7 @@ You are continuing the implementation of the email verification and password res
 - **Security measures** properly implemented before committing
 
 ### Critical Checks:
+
 - [ ] Database schema is correct and migrated
 - [ ] API routes handle errors properly
 - [ ] Frontend components are accessible
@@ -167,6 +184,7 @@ You are continuing the implementation of the email verification and password res
 ## TROUBLESHOOTING
 
 ### Common Issues:
+
 1. **File Size Exceeds 150 Lines**: Break into smaller, purpose-specific files
 2. **Generic Naming**: Use descriptive, purpose-specific names
 3. **Missing Dependencies**: Check `IMPROVEMENTS_NEEDED.md` for missing packages
@@ -178,6 +196,7 @@ You are continuing the implementation of the email verification and password res
 9. **Build Errors**: Ensure `npm run build` passes before moving to next phase
 
 ### Getting Help:
+
 - Review `email-integration-phases/IMPROVEMENTS_NEEDED.md` for known issues
 - Check existing codebase patterns for guidance
 - Use the phase file checklists for validation
@@ -207,4 +226,4 @@ You are continuing the implementation of the email verification and password res
 - Proper TypeScript types throughout
 - Follows existing project patterns
 
-Continue the implementation from where the previous agent left off, ensuring quality and following all established patterns and requirements. 
+Continue the implementation from where the previous agent left off, ensuring quality and following all established patterns and requirements.

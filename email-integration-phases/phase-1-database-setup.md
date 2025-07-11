@@ -1,14 +1,16 @@
 # Phase 1: Database and Core Setup
 
 ## Overview
+
 This phase focuses on setting up the database schema, migrations, dependencies, and environment variables needed for email integration.
 
 ## Tasks
 
 ### Task 1: Update Prisma Schema
+
 - **File**: `prisma/schema.prisma`
 - **Action**: Add new models for email verification and password reset tokens
-- **Details**: 
+- **Details**:
   - Add `EmailVerificationToken` model with fields: id, userId, token, expiresAt, createdAt, user relation
   - Add `PasswordResetToken` model with fields: id, userId, token, expiresAt, createdAt, user relation
   - Add `EmailRateLimit` model for rate limiting
@@ -17,6 +19,7 @@ This phase focuses on setting up the database schema, migrations, dependencies, 
   - Add proper indexes and table mappings
 
 **Schema Changes**:
+
 ```prisma
 model User {
   id                String    @id @default(cuid())
@@ -27,7 +30,7 @@ model User {
   emailVerifiedAt   DateTime?
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
-  
+
   // Relations
   emailVerificationTokens EmailVerificationToken[]
   passwordResetTokens     PasswordResetToken[]
@@ -47,9 +50,9 @@ model EmailVerificationToken {
   userId    String
   expiresAt DateTime
   createdAt DateTime @default(now())
-  
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@index([token])
   @@index([userId])
   @@index([expiresAt])
@@ -62,9 +65,9 @@ model PasswordResetToken {
   userId    String
   expiresAt DateTime
   createdAt DateTime @default(now())
-  
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@index([token])
   @@index([userId])
   @@index([expiresAt])
@@ -77,7 +80,7 @@ model EmailRateLimit {
   type      String   // 'verification' or 'passwordReset'
   ipAddress String?
   createdAt DateTime @default(now())
-  
+
   @@index([email, type, createdAt])
   @@index([ipAddress, type, createdAt])
   @@map("email_rate_limits")
@@ -92,9 +95,9 @@ model EmailLog {
   error     String?
   metadata  Json?
   createdAt DateTime @default(now())
-  
+
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
-  
+
   @@index([type, createdAt])
   @@index([email, createdAt])
   @@index([status, createdAt])
@@ -103,11 +106,13 @@ model EmailLog {
 ```
 
 ### Task 2: Create Database Migration
+
 - **Command**: `npx prisma migrate dev --name add-email-verification`
 - **Action**: Generate and apply database migration for new schema changes
 - **Expected Output**: New migration file created in `prisma/migrations/`
 
 ### Task 3: Install Dependencies
+
 - **Command**: `npm install resend crypto @react-email/components @react-email/render react-hot-toast bcryptjs`
 - **Command**: `npm install --save-dev @types/crypto @types/bcryptjs`
 - **Action**: Add required packages for Resend email with React Email templates
@@ -122,17 +127,20 @@ model EmailLog {
   - `@types/bcryptjs`: TypeScript types for bcryptjs
 
 ### Task 4: Update Environment Variables
+
 - **File**: `.env.local` or `.env`
 - **Action**: Add the following variables:
+
   ```
   # Required for email functionality
   RESEND_API_KEY=your_resend_api_key
   RESEND_FROM_EMAIL=noreply@yourdomain.com
   NEXT_PUBLIC_APP_URL=http://localhost:3000
-  
+
   # Optional (for development)
   NODE_ENV=development
   ```
+
 - **Notes**:
   - Get RESEND_API_KEY from [Resend Dashboard](https://resend.com/api-keys)
   - RESEND_FROM_EMAIL should be a verified domain in Resend
@@ -140,9 +148,11 @@ model EmailLog {
   - NODE_ENV is automatically set by Next.js but can be overridden
 
 ### Task 5: Create Environment Validation
+
 - **File**: `src/operations/environmentValidationOperations.ts`
 - **Action**: Create environment validation to ensure all required variables are set
 - **Code**:
+
   ```typescript
   interface EnvironmentConfig {
     resendApiKey: string;
@@ -150,54 +160,55 @@ model EmailLog {
     appUrl: string;
     nodeEnv: string;
   }
-  
+
   export function validateEnvironment(): EnvironmentConfig {
     const requiredVars = {
       RESEND_API_KEY: process.env.RESEND_API_KEY,
       RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
       NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     };
-    
+
     const missingVars = Object.entries(requiredVars)
       .filter(([_, value]) => !value)
       .map(([key]) => key);
-    
+
     if (missingVars.length > 0) {
       throw new Error(
-        `Missing required environment variables: ${missingVars.join(', ')}`
+        `Missing required environment variables: ${missingVars.join(", ")}`,
       );
     }
-    
+
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(requiredVars.RESEND_FROM_EMAIL!)) {
-      throw new Error('RESEND_FROM_EMAIL must be a valid email address');
+      throw new Error("RESEND_FROM_EMAIL must be a valid email address");
     }
-    
+
     // Validate URL format
     try {
       new URL(requiredVars.NEXT_PUBLIC_APP_URL!);
     } catch {
-      throw new Error('NEXT_PUBLIC_APP_URL must be a valid URL');
+      throw new Error("NEXT_PUBLIC_APP_URL must be a valid URL");
     }
-    
+
     return {
       resendApiKey: requiredVars.RESEND_API_KEY!,
       resendFromEmail: requiredVars.RESEND_FROM_EMAIL!,
       appUrl: requiredVars.NEXT_PUBLIC_APP_URL!,
-      nodeEnv: process.env.NODE_ENV || 'development',
+      nodeEnv: process.env.NODE_ENV || "development",
     };
   }
-  
+
   export function getEnvironmentConfig(): EnvironmentConfig {
     try {
       return validateEnvironment();
     } catch (error) {
-      console.error('Environment validation failed:', error);
+      console.error("Environment validation failed:", error);
       throw error;
     }
   }
   ```
+
 - **Line Count**: ~45 lines
 
 ## Validation Checklist
@@ -215,12 +226,14 @@ model EmailLog {
 ## Database Models Summary
 
 ### Core Models:
+
 - **EmailVerificationToken**: Stores verification tokens with expiration
 - **PasswordResetToken**: Stores password reset tokens with expiration
 - **EmailRateLimit**: Tracks rate limiting for email operations
 - **EmailLog**: Logs all email operations for monitoring
 
 ### Key Features:
+
 - **Cascade Deletes**: Tokens are automatically deleted when user is deleted
 - **Indexes**: Optimized queries for token lookup and rate limiting
 - **Expiration Tracking**: Automatic cleanup of expired tokens
@@ -228,4 +241,5 @@ model EmailLog {
 - **Rate Limiting**: Prevents abuse of email endpoints
 
 ## Next Phase
-After completing Phase 1, proceed to **Phase 2: Email Service Implementation** to set up the Resend client and email templates. 
+
+After completing Phase 1, proceed to **Phase 2: Email Service Implementation** to set up the Resend client and email templates.

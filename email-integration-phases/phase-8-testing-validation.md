@@ -1,11 +1,13 @@
 # Phase 8: Testing and Validation
 
 ## Overview
+
 This phase focuses on manual testing of email flows, edge cases, and creating email template previews for development and validation.
 
 ## Tasks
 
 ### Task 37: Manual Testing - Email Verification Flow
+
 - **Action**: Manually test complete email verification flow
 - **Steps**:
   1. Register a new user
@@ -17,6 +19,7 @@ This phase focuses on manual testing of email flows, edge cases, and creating em
   7. Test login with verified account
 
 ### Task 38: Manual Testing - Password Reset Flow
+
 - **Action**: Manually test complete password reset flow
 - **Steps**:
   1. Go to forgot password page
@@ -29,6 +32,7 @@ This phase focuses on manual testing of email flows, edge cases, and creating em
   8. Test login with new password
 
 ### Task 39: Manual Testing - Edge Cases
+
 - **Action**: Manually test error scenarios and edge cases
 - **Test Cases**:
   1. **Expired tokens**: Wait 24+ hours and try to use token
@@ -41,62 +45,78 @@ This phase focuses on manual testing of email flows, edge cases, and creating em
   8. **Network errors**: Simulate network failures
 
 ### Task 40: Add Email Template Previews
+
 - **File**: `src/app/api/email/preview/route.ts`
 - **Action**: Create development route to preview email templates
 - **Code**:
+
   ```typescript
-  import { NextRequest, NextResponse } from 'next/server';
-  import { render } from '@react-email/render';
-  import EmailVerificationTemplate from '@/components/emails/EmailVerificationTemplate';
-  import PasswordResetTemplate from '@/components/emails/PasswordResetTemplate';
-  import WelcomeEmailTemplate from '@/components/emails/WelcomeEmailTemplate';
-  
+  import { NextRequest, NextResponse } from "next/server";
+  import { render } from "@react-email/render";
+  import EmailVerificationTemplate from "@/components/emails/EmailVerificationTemplate";
+  import PasswordResetTemplate from "@/components/emails/PasswordResetTemplate";
+  import WelcomeEmailTemplate from "@/components/emails/WelcomeEmailTemplate";
+
   export async function GET(req: NextRequest) {
     // Only allow in development
-    if (process.env.NODE_ENV !== 'development') {
-      return NextResponse.json({ error: 'Not available in production' }, { status: 404 });
+    if (process.env.NODE_ENV !== "development") {
+      return NextResponse.json(
+        { error: "Not available in production" },
+        { status: 404 },
+      );
     }
-    
+
     const { searchParams } = new URL(req.url);
-    const template = searchParams.get('template');
-    const userName = searchParams.get('userName') || 'John Doe';
-    
-    let html = '';
-    let subject = '';
-    
+    const template = searchParams.get("template");
+    const userName = searchParams.get("userName") || "John Doe";
+
+    let html = "";
+    let subject = "";
+
     switch (template) {
-      case 'verification':
-        html = render(EmailVerificationTemplate({
-          userName,
-          verificationLink: 'https://example.com/verify?token=sample-token-123'
-        }));
-        subject = 'Verify your email address';
+      case "verification":
+        html = render(
+          EmailVerificationTemplate({
+            userName,
+            verificationLink:
+              "https://example.com/verify?token=sample-token-123",
+          }),
+        );
+        subject = "Verify your email address";
         break;
-        
-      case 'reset':
-        html = render(PasswordResetTemplate({
-          userName,
-          resetLink: 'https://example.com/reset?token=sample-token-123'
-        }));
-        subject = 'Reset your password';
+
+      case "reset":
+        html = render(
+          PasswordResetTemplate({
+            userName,
+            resetLink: "https://example.com/reset?token=sample-token-123",
+          }),
+        );
+        subject = "Reset your password";
         break;
-        
-      case 'welcome':
-        html = render(WelcomeEmailTemplate({
-          userName,
-          loginLink: 'https://example.com/login'
-        }));
-        subject = 'Welcome to Valid Names!';
+
+      case "welcome":
+        html = render(
+          WelcomeEmailTemplate({
+            userName,
+            loginLink: "https://example.com/login",
+          }),
+        );
+        subject = "Welcome to Valid Names!";
         break;
-        
+
       default:
-        return NextResponse.json({ 
-          error: 'Template not found',
-          availableTemplates: ['verification', 'reset', 'welcome']
-        }, { status: 404 });
+        return NextResponse.json(
+          {
+            error: "Template not found",
+            availableTemplates: ["verification", "reset", "welcome"],
+          },
+          { status: 404 },
+        );
     }
-    
-    return new NextResponse(`
+
+    return new NextResponse(
+      `
       <!DOCTYPE html>
       <html>
         <head>
@@ -128,59 +148,70 @@ This phase focuses on manual testing of email flows, edge cases, and creating em
           </div>
         </body>
       </html>
-    `, {
-      headers: { 'Content-Type': 'text/html' },
-    });
+    `,
+      {
+        headers: { "Content-Type": "text/html" },
+      },
+    );
   }
   ```
+
 - **Line Count**: ~70 lines
 
 ### Task 41: Create Email Testing Utilities
+
 - **File**: `src/operations/emailTestingOperations.ts`
 - **Action**: Create utilities for manual testing of email functionality
 - **Code**:
+
   ```typescript
-  import { prisma } from '@/lib/prisma';
-  import { generateEmailVerificationToken, generatePasswordResetToken } from './tokenOperations';
-  import { sendEmailVerification, sendPasswordReset } from './emailVerificationOperations';
-  
+  import { prisma } from "@/lib/prisma";
+  import {
+    generateEmailVerificationToken,
+    generatePasswordResetToken,
+  } from "./tokenOperations";
+  import {
+    sendEmailVerification,
+    sendPasswordReset,
+  } from "./emailVerificationOperations";
+
   export async function createTestEmailVerification(userId: string) {
     const token = await generateEmailVerificationToken(userId);
     const user = await prisma.user.findUnique({ where: { id: userId } });
-    
+
     if (!user) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
-    
-    await sendEmailVerification(user.email, user.name || 'Test User', token);
-    
+
+    await sendEmailVerification(user.email, user.name || "Test User", token);
+
     return {
       token,
       user,
-      verificationLink: `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${token}`
+      verificationLink: `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${token}`,
     };
   }
-  
+
   export async function createTestPasswordReset(userId: string) {
     const token = await generatePasswordResetToken(userId);
     const user = await prisma.user.findUnique({ where: { id: userId } });
-    
+
     if (!user) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
-    
-    await sendPasswordReset(user.email, user.name || 'Test User', token);
-    
+
+    await sendPasswordReset(user.email, user.name || "Test User", token);
+
     return {
       token,
       user,
-      resetLink: `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${token}`
+      resetLink: `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${token}`,
     };
   }
-  
+
   export async function cleanupTestTokens() {
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-    
+
     await prisma.emailVerificationToken.deleteMany({
       where: {
         createdAt: {
@@ -188,7 +219,7 @@ This phase focuses on manual testing of email flows, edge cases, and creating em
         },
       },
     });
-    
+
     await prisma.passwordResetToken.deleteMany({
       where: {
         createdAt: {
@@ -197,14 +228,14 @@ This phase focuses on manual testing of email flows, edge cases, and creating em
       },
     });
   }
-  
+
   export async function getEmailStats() {
     const [verificationTokens, resetTokens, verifiedUsers] = await Promise.all([
       prisma.emailVerificationToken.count(),
       prisma.passwordResetToken.count(),
       prisma.user.count({ where: { emailVerified: true } }),
     ]);
-    
+
     return {
       activeVerificationTokens: verificationTokens,
       activeResetTokens: resetTokens,
@@ -212,65 +243,83 @@ This phase focuses on manual testing of email flows, edge cases, and creating em
     };
   }
   ```
+
 - **Line Count**: ~60 lines
 
 ### Task 42: Create Email Testing API Routes
+
 - **File**: `src/app/api/test/email/route.ts`
 - **Action**: Create testing endpoints for manual email testing (development only)
 - **Code**:
+
   ```typescript
-  import { NextRequest, NextResponse } from 'next/server';
-  import { createTestEmailVerification, createTestPasswordReset, cleanupTestTokens, getEmailStats } from '@/operations/emailTestingOperations';
-  import { prisma } from '@/lib/prisma';
-  
+  import { NextRequest, NextResponse } from "next/server";
+  import {
+    createTestEmailVerification,
+    createTestPasswordReset,
+    cleanupTestTokens,
+    getEmailStats,
+  } from "@/operations/emailTestingOperations";
+  import { prisma } from "@/lib/prisma";
+
   export async function GET(req: NextRequest) {
     // Only allow in development
-    if (process.env.NODE_ENV !== 'development') {
-      return NextResponse.json({ error: 'Not available in production' }, { status: 404 });
+    if (process.env.NODE_ENV !== "development") {
+      return NextResponse.json(
+        { error: "Not available in production" },
+        { status: 404 },
+      );
     }
-    
+
     const stats = await getEmailStats();
     return NextResponse.json(stats);
   }
-  
+
   export async function POST(req: NextRequest) {
     // Only allow in development
-    if (process.env.NODE_ENV !== 'development') {
-      return NextResponse.json({ error: 'Not available in production' }, { status: 404 });
+    if (process.env.NODE_ENV !== "development") {
+      return NextResponse.json(
+        { error: "Not available in production" },
+        { status: 404 },
+      );
     }
-    
+
     try {
       const { action, userId } = await req.json();
-      
+
       switch (action) {
-        case 'create-verification':
+        case "create-verification":
           const verification = await createTestEmailVerification(userId);
           return NextResponse.json(verification);
-          
-        case 'create-reset':
+
+        case "create-reset":
           const reset = await createTestPasswordReset(userId);
           return NextResponse.json(reset);
-          
-        case 'cleanup':
+
+        case "cleanup":
           await cleanupTestTokens();
-          return NextResponse.json({ message: 'Test tokens cleaned up' });
-          
-        case 'stats':
+          return NextResponse.json({ message: "Test tokens cleaned up" });
+
+        case "stats":
           const stats = await getEmailStats();
           return NextResponse.json(stats);
-          
+
         default:
-          return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
+          return NextResponse.json(
+            { error: "Invalid action" },
+            { status: 400 },
+          );
       }
     } catch (error) {
-      console.error('Email testing error:', error);
+      console.error("Email testing error:", error);
       return NextResponse.json(
-        { error: 'Testing operation failed' },
-        { status: 500 }
+        { error: "Testing operation failed" },
+        { status: 500 },
       );
     }
   }
   ```
+
 - **Line Count**: ~55 lines
 
 ## Validation Checklist
@@ -291,11 +340,13 @@ This phase focuses on manual testing of email flows, edge cases, and creating em
 ## Manual Testing Scenarios
 
 ### Happy Path Testing
+
 1. **Registration Flow**: User registers → Email sent → User verifies → Welcome email sent
 2. **Password Reset Flow**: User requests reset → Email sent → User resets password → Success
 3. **Login Flow**: Verified user logs in successfully
 
 ### Error Path Testing
+
 1. **Invalid Tokens**: Expired, malformed, or non-existent tokens
 2. **Rate Limiting**: Exceeding email send limits
 3. **Network Errors**: Simulated API failures
@@ -303,6 +354,7 @@ This phase focuses on manual testing of email flows, edge cases, and creating em
 5. **Already Verified**: Attempting to verify already verified email
 
 ### Edge Case Testing
+
 1. **Concurrent Requests**: Multiple verification attempts
 2. **Token Cleanup**: Automatic cleanup of expired tokens
 3. **Email Formatting**: Various email address formats
@@ -312,14 +364,17 @@ This phase focuses on manual testing of email flows, edge cases, and creating em
 ## Development Tools
 
 ### Email Template Preview
+
 - **URL**: `/api/email/preview?template=verification&userName=John`
 - **Templates**: verification, reset, welcome
 - **Parameters**: template, userName (optional)
 
 ### Email Testing API
+
 - **URL**: `/api/test/email`
 - **Actions**: create-verification, create-reset, cleanup, stats
 - **Environment**: Development only
 
 ## Next Phase
-After completing Phase 8, proceed to **Phase 9: Final Polish and Documentation** to add styling, environment validation, and comprehensive documentation. 
+
+After completing Phase 8, proceed to **Phase 9: Final Polish and Documentation** to add styling, environment validation, and comprehensive documentation.
