@@ -1,5 +1,5 @@
 import { prisma } from "@/app/database/client";
-import { validateStandardTurnstileToken } from "@/operations/authenticationOperations";
+import { validateTurnstileTokenDirectly } from "@/operations/authenticationOperations";
 import { sendEmailVerification } from "@/operations/emailVerificationOperations";
 import { generateEmailVerificationToken } from "@/operations/tokenOperations";
 import { handleError } from "@/validators/apiErrorResponse";
@@ -45,8 +45,11 @@ export async function POST(request: NextRequest) {
         "unknown",
     });
 
-    // Validate Turnstile token using shared operation
-    const turnstileValidation = await validateStandardTurnstileToken(request);
+    // Validate Turnstile token using the extracted token directly
+    const turnstileValidation = await validateTurnstileTokenDirectly(
+      turnstileToken,
+      request,
+    );
 
     if (!turnstileValidation.success) {
       console.error("Registration Turnstile validation failed:", {
