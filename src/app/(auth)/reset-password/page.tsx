@@ -5,7 +5,7 @@ import { FeatureErrorBoundary } from "@/components/FeatureErrorBoundary";
 import { FormBuilder } from "@/components/forms/FormBuilder";
 import { validatePassword } from "@/validators/emailValidation";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, Suspense } from "react";
+import { Suspense, useState } from "react";
 
 function ResetPasswordContent() {
   const searchParams = useSearchParams();
@@ -24,7 +24,9 @@ function ResetPasswordContent() {
   const validateConfirmPassword = (confirmPassword: string) => {
     if (!confirmPassword.trim()) return "Please confirm your password";
     // Access the password value from the formData state
-    const passwordValue = (document.querySelector('input[name="password"]') as HTMLInputElement)?.value || "";
+    const passwordValue =
+      (document.querySelector('input[name="password"]') as HTMLInputElement)
+        ?.value || "";
     if (passwordValue !== confirmPassword) return "Passwords do not match";
     return undefined;
   };

@@ -1,7 +1,7 @@
 "use client";
 
-import { FeatureErrorBoundary } from "@/components/FeatureErrorBoundary";
 import { Card } from "@/components/Card";
+import { FeatureErrorBoundary } from "@/components/FeatureErrorBoundary";
 import { FormBuilder } from "@/components/forms/FormBuilder";
 import { validateEmail } from "@/validators/emailValidation";
 import { useState } from "react";
@@ -30,7 +30,12 @@ function VerifyEmailContent() {
   const handleSuccess = (data?: unknown) => {
     setSuccess(true);
     // Extract email from form data or use empty string
-    if (data && typeof data === "object" && "email" in data && typeof (data as { email: string }).email === "string") {
+    if (
+      data &&
+      typeof data === "object" &&
+      "email" in data &&
+      typeof (data as { email: string }).email === "string"
+    ) {
       setEmail((data as { email: string }).email);
     }
   };
@@ -46,7 +51,8 @@ function VerifyEmailContent() {
             We&#39;ve sent a verification email to {email}
           </p>
           <p className="mb-6 text-sm text-gray-600">
-            Please check your inbox and click the verification link to complete your registration.
+            Please check your inbox and click the verification link to complete
+            your registration.
           </p>
         </div>
       </Card>

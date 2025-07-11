@@ -40,7 +40,8 @@ function ForgotPasswordContent() {
             Reset Email Sent
           </h1>
           <p className="mb-4 text-green-600">
-            We&#39;ve sent a password reset email if the address exists in our system.
+            We&#39;ve sent a password reset email if the address exists in our
+            system.
           </p>
           <p className="mb-6 text-sm text-gray-600">
             Please check your inbox and click the reset link to create a new

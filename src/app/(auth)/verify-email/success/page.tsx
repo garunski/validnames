@@ -3,7 +3,7 @@
 import { Card } from "@/components/Card";
 import { FeatureErrorBoundary } from "@/components/FeatureErrorBoundary";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 function VerifyEmailSuccessContent() {
   const searchParams = useSearchParams();
