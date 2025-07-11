@@ -24,6 +24,7 @@ interface FormBuilderProps {
   onSuccess: (data?: unknown) => void;
   onCancel?: () => void;
   additionalData?: Record<string, unknown>;
+  initialValues?: Record<string, string>;
 }
 
 export function FormBuilder({
@@ -31,8 +32,10 @@ export function FormBuilder({
   onSuccess,
   onCancel,
   additionalData = {},
+  initialValues = {},
 }: FormBuilderProps) {
-  const [formData, setFormData] = useState<Record<string, string>>({});
+  const [formData, setFormData] =
+    useState<Record<string, string>>(initialValues);
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const [generalError, setGeneralError] = useState<string | null>(null);
   const queryClient = useQueryClient();
@@ -57,9 +60,7 @@ export function FormBuilder({
           queryClient.invalidateQueries({ queryKey: [queryKey] });
         });
       }
-      setFormData({});
-      setErrors({});
-      setGeneralError(null);
+      resetForm();
       onSuccess(data);
     },
     onError: async (error: unknown) => {
@@ -89,6 +90,17 @@ export function FormBuilder({
     setFormData((prev) => ({ ...prev, [fieldName]: value }));
     setErrors((prev) => ({ ...prev, [fieldName]: undefined }));
     setGeneralError(null);
+  };
+
+  const resetForm = () => {
+    setFormData(initialValues);
+    setErrors({});
+    setGeneralError(null);
+  };
+
+  const handleCancel = () => {
+    resetForm();
+    onCancel?.();
   };
 
   const isLoading = mutation.isPending;
@@ -123,7 +135,7 @@ export function FormBuilder({
             {isLoading ? config.loadingText : config.submitText}
           </Button>
           {onCancel && (
-            <Button onClick={onCancel} plain disabled={isLoading}>
+            <Button onClick={handleCancel} plain disabled={isLoading}>
               Cancel
             </Button>
           )}

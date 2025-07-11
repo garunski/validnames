@@ -7,6 +7,7 @@ export interface FormField {
   name: string;
   type: "text" | "email" | "password" | "number" | "textarea";
   placeholder: string;
+  label?: string;
   required?: boolean;
   className?: string;
   rows?: number;
@@ -68,6 +69,12 @@ export function FormField({
 
   return (
     <div className={containerClass}>
+      {field.label && (
+        <label className="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          {field.label}
+          {field.required && <span className="ml-1 text-red-500">*</span>}
+        </label>
+      )}
       {renderInput()}
       {error && (
         <div className="mt-2 rounded border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">

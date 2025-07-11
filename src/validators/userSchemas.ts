@@ -13,6 +13,17 @@ export const userLoginSchema = z.object({
 });
 
 export const userProfileUpdateSchema = z.object({
-  name: z.string().min(1, "Name is required").optional(),
-  email: z.string().email("Invalid email address").optional(),
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .max(100, "Name must be less than 100 characters")
+    .trim()
+    .refine((val) => val.length > 0, "Name cannot be empty"),
+  email: z
+    .string()
+    .email("Please enter a valid email address")
+    .min(1, "Email is required")
+    .max(255, "Email must be less than 255 characters")
+    .toLowerCase()
+    .trim(),
 });

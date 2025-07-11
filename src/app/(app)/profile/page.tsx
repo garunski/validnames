@@ -2,13 +2,13 @@
 
 import { FeatureErrorBoundary } from "@/components/FeatureErrorBoundary";
 import { fetchWithAuth } from "@/hooks/fetchWithAuth";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { ProfileHeader } from "./components/ProfileHeader";
 import { ProfileInformation } from "./components/ProfileInformation";
 import { ProfileStats } from "./components/ProfileStats";
 
 export default function ProfilePage() {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   // Fetch user data
   const { data: userData, isLoading: userLoading } = useQuery({
@@ -60,7 +60,6 @@ export default function ProfilePage() {
         <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
           <ProfileInformation
             user={user}
-            queryClient={queryClient}
             alwaysEditable
           />
         </div>
