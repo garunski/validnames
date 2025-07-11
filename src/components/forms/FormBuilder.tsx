@@ -45,7 +45,15 @@ export function FormBuilder({
 
   // Update form data when initialValues change (e.g., after successful save)
   useEffect(() => {
-    setFormData(initialValues);
+    // Only update if values are actually different (shallow compare)
+    const keys = Object.keys(initialValues || {});
+    const isDifferent = keys.some(
+      (key) => formData[key] !== initialValues[key],
+    );
+    if (isDifferent) {
+      setFormData(initialValues);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialValues]);
 
   // Fetch CSRF token on mount

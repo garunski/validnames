@@ -85,7 +85,7 @@ export function FavoritesList({
   }
 
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="min-h-[420px] rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
       <div className="mb-3 flex items-center gap-2">
         <HeartIcon className="h-4 w-4 text-pink-600 dark:text-pink-400" />
         <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
