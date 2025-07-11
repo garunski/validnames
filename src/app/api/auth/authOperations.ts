@@ -1,13 +1,15 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import { getEnvironmentConfig } from "../../../operations/environmentValidationOperations";
 import { createJwtKey } from "../../../operations/securityOperations";
 
-// Get validated JWT secret from environment
-const { jwtSecret } = getEnvironmentConfig();
-const key = createJwtKey(jwtSecret);
+function getJwtKey() {
+  const jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) throw new Error("JWT_SECRET is not set");
+  return createJwtKey(jwtSecret);
+}
 
 export async function encrypt(payload: { userId: string; expires: Date }) {
+  const key = getJwtKey();
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -18,6 +20,7 @@ export async function encrypt(payload: { userId: string; expires: Date }) {
 export async function decrypt(
   input: string,
 ): Promise<{ userId: string; expires: Date }> {
+  const key = getJwtKey();
   const { payload } = await jwtVerify(input, key, {
     algorithms: ["HS256"],
   });

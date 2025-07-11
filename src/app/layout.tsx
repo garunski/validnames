@@ -4,25 +4,6 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import React from "react";
 import ReactQueryProvider from "./reactQueryProvider";
-import { validateStartupEnvironment } from "./startupValidation";
-
-// Validate environment variables on startup
-if (typeof window === "undefined") {
-  // Only run on server side
-  try {
-    validateStartupEnvironment();
-  } catch (error) {
-    console.error(
-      "Critical: Application startup failed due to environment validation errors:",
-      error,
-    );
-    // In production, you might want to exit the process here
-    if (process.env.NODE_ENV === "production") {
-      console.error("Exiting due to critical environment validation failure");
-      process.exit(1);
-    }
-  }
-}
 
 export const metadata: Metadata = {
   title: {
