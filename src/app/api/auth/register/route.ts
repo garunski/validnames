@@ -1,10 +1,7 @@
 import { prisma } from "@/app/database/client";
+import { validateStandardTurnstileToken } from "@/operations/authenticationOperations";
 import { sendEmailVerification } from "@/operations/emailVerificationOperations";
 import { generateEmailVerificationToken } from "@/operations/tokenOperations";
-import {
-  getTurnstileErrorMessage,
-  validateTurnstileToken,
-} from "@/operations/turnstileValidationOperations";
 import { handleError } from "@/validators/apiErrorResponse";
 import { ConflictError, UnauthorizedError } from "@/validators/apiErrorTypes";
 import {
@@ -27,23 +24,13 @@ export async function POST(request: NextRequest) {
       return errorResponses.validationError(validation.errors!);
     }
 
-    const { email, password, name, turnstileToken } = validation.data!;
+    const { email, password, name } = validation.data!;
 
-    // Validate Turnstile token
-    const clientIp =
-      request.headers.get("x-forwarded-for") ||
-      request.headers.get("x-real-ip") ||
-      "unknown";
-    const turnstileValidation = await validateTurnstileToken(
-      turnstileToken,
-      clientIp,
-    );
+    // Validate Turnstile token using shared operation
+    const turnstileValidation = await validateStandardTurnstileToken(request);
 
     if (!turnstileValidation.success) {
-      const errorMessage = getTurnstileErrorMessage(
-        turnstileValidation.errorCodes || [],
-      );
-      throw new UnauthorizedError(errorMessage);
+      throw new UnauthorizedError(turnstileValidation.errorMessage!);
     }
 
     // Check if user already exists

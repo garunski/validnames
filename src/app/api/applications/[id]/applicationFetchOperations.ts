@@ -1,4 +1,5 @@
 import { prisma } from "@/app/database/client";
+import { processTldDataForResponse } from "@/operations/tldConversionOperations";
 import { NotFoundError } from "@/validators/apiErrorTypes";
 import { createSuccessResponse } from "@/validators/apiResponseFormatter";
 
@@ -32,22 +33,10 @@ export async function fetchApplicationWithDetails(
     throw new NotFoundError("Application not found");
   }
 
-  // Convert selectedTldIds to selectedTldExtensions
-  let selectedTldExtensions: string[] = [];
-  if (application.selectedTldIds) {
-    try {
-      const selectedTldIds = JSON.parse(application.selectedTldIds);
-      if (selectedTldIds.length > 0) {
-        const selectedTlds = await prisma.tLD.findMany({
-          where: { id: { in: selectedTldIds } },
-          select: { extension: true },
-        });
-        selectedTldExtensions = selectedTlds.map((tld) => tld.extension);
-      }
-    } catch (error) {
-      console.error("Error parsing selectedTldIds:", error);
-    }
-  }
+  // Convert selectedTldIds to selectedTldExtensions using shared operation
+  const { selectedTldExtensions } = await processTldDataForResponse(
+    application.selectedTldIds,
+  );
 
   // Add selectedTldExtensions to the response
   const applicationWithTlds = {

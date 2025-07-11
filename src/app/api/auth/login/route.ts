@@ -1,9 +1,6 @@
 import { createSession } from "@/app/api/auth/authOperations";
 import { prisma } from "@/app/database/client";
-import {
-  getTurnstileErrorMessage,
-  validateTurnstileToken,
-} from "@/operations/turnstileValidationOperations";
+import { validateStandardTurnstileToken } from "@/operations/authenticationOperations";
 import { handleError } from "@/validators/apiErrorResponse";
 import { UnauthorizedError } from "@/validators/apiErrorTypes";
 import {
@@ -23,23 +20,13 @@ export async function POST(request: NextRequest) {
       return errorResponses.validationError(validation.errors!);
     }
 
-    const { email, password, turnstileToken } = validation.data!;
+    const { email, password } = validation.data!;
 
-    // Validate Turnstile token
-    const clientIp =
-      request.headers.get("x-forwarded-for") ||
-      request.headers.get("x-real-ip") ||
-      "unknown";
-    const turnstileValidation = await validateTurnstileToken(
-      turnstileToken,
-      clientIp,
-    );
+    // Validate Turnstile token using shared operation
+    const turnstileValidation = await validateStandardTurnstileToken(request);
 
     if (!turnstileValidation.success) {
-      const errorMessage = getTurnstileErrorMessage(
-        turnstileValidation.errorCodes || [],
-      );
-      throw new UnauthorizedError(errorMessage);
+      throw new UnauthorizedError(turnstileValidation.errorMessage!);
     }
 
     const user = await prisma.user.findUnique({
