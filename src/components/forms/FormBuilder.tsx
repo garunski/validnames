@@ -43,6 +43,11 @@ export function FormBuilder({
   const [csrfToken, setCsrfToken] = useState<string>("");
   const queryClient = useQueryClient();
 
+  // Update form data when initialValues change (e.g., after successful save)
+  useEffect(() => {
+    setFormData(initialValues);
+  }, [initialValues]);
+
   // Fetch CSRF token on mount
   useEffect(() => {
     async function fetchCsrfToken() {
