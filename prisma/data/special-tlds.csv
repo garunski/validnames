@@ -1,0 +1,8 @@
+extension,name,category,description,popularity,hidden
+.me,Personal,Special,Personal websites,high,false
+.tv,Television,Special,Television and media,high,false
+.ly,Short URLs,Special,Short URLs and personal sites,medium,false
+.cc,Creative Commons,Special,Creative content,medium,false
+.ws,Website,Special,Websites and web services,medium,false
+.name,Personal Names,Special,Personal names,low,false
+.pro,Professional,Special,Professional services,medium,false 

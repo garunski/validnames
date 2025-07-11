@@ -1,0 +1,58 @@
+extension,name,category,description,popularity,hidden
+.us,United States,Country Code,United States,high,true
+.uk,United Kingdom,Country Code,United Kingdom,high,true
+.ca,Canada,Country Code,Canada,high,true
+.au,Australia,Country Code,Australia,high,true
+.nz,New Zealand,Country Code,New Zealand,medium,true
+.ie,Ireland,Country Code,Ireland,medium,true
+.de,Germany,Country Code,Germany,high,true
+.fr,France,Country Code,France,high,true
+.es,Spain,Country Code,Spain,high,true
+.it,Italy,Country Code,Italy,high,true
+.nl,Netherlands,Country Code,Netherlands,high,true
+.se,Sweden,Country Code,Sweden,medium,true
+.no,Norway,Country Code,Norway,medium,true
+.dk,Denmark,Country Code,Denmark,medium,true
+.fi,Finland,Country Code,Finland,medium,true
+.be,Belgium,Country Code,Belgium,medium,true
+.ch,Switzerland,Country Code,Switzerland,medium,true
+.at,Austria,Country Code,Austria,medium,true
+.pl,Poland,Country Code,Poland,medium,true
+.cz,Czech Republic,Country Code,Czech Republic,medium,true
+.pt,Portugal,Country Code,Portugal,medium,true
+.gr,Greece,Country Code,Greece,medium,true
+.hu,Hungary,Country Code,Hungary,medium,true
+.ro,Romania,Country Code,Romania,medium,true
+.bg,Bulgaria,Country Code,Bulgaria,low,true
+.hr,Croatia,Country Code,Croatia,low,true
+.si,Slovenia,Country Code,Slovenia,low,true
+.sk,Slovakia,Country Code,Slovakia,low,true
+.ee,Estonia,Country Code,Estonia,low,true
+.lv,Latvia,Country Code,Latvia,low,true
+.lt,Lithuania,Country Code,Lithuania,low,true
+.jp,Japan,Country Code,Japan,high,true
+.cn,China,Country Code,China,high,true
+.in,India,Country Code,India,high,true
+.kr,South Korea,Country Code,South Korea,medium,true
+.sg,Singapore,Country Code,Singapore,medium,true
+.hk,Hong Kong,Country Code,Hong Kong,medium,true
+.tw,Taiwan,Country Code,Taiwan,medium,true
+.th,Thailand,Country Code,Thailand,medium,true
+.my,Malaysia,Country Code,Malaysia,medium,true
+.id,Indonesia,Country Code,Indonesia,medium,true
+.ph,Philippines,Country Code,Philippines,medium,true
+.vn,Vietnam,Country Code,Vietnam,medium,true
+.br,Brazil,Country Code,Brazil,high,true
+.mx,Mexico,Country Code,Mexico,high,true
+.ar,Argentina,Country Code,Argentina,medium,true
+.cl,Chile,Country Code,Chile,medium,true
+.co,Colombia,Country Code,Colombia,medium,true
+.pe,Peru,Country Code,Peru,medium,true
+.ve,Venezuela,Country Code,Venezuela,low,true
+.ru,Russia,Country Code,Russia,high,true
+.za,South Africa,Country Code,South Africa,medium,true
+.eg,Egypt,Country Code,Egypt,medium,true
+.ae,UAE,Country Code,United Arab Emirates,medium,true
+.sa,Saudi Arabia,Country Code,Saudi Arabia,medium,true
+.il,Israel,Country Code,Israel,medium,true
+.tr,Turkey,Country Code,Turkey,medium,true 
