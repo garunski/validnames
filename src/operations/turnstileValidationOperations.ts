@@ -11,17 +11,14 @@ export async function validateTurnstileToken(
 
   // Development bypass: if no secret key is configured in development, auto-pass
   if (process.env.NODE_ENV === "development" && !secretKey) {
-    console.log("Turnstile validation bypassed in development mode");
     return { success: true };
   }
 
   if (!secretKey) {
-    console.error("TURNSTILE_SECRET_KEY not configured in production");
     return { success: false, errorCodes: ["missing_secret_key"] };
   }
 
   if (!token) {
-    console.error("Turnstile token is missing");
     return { success: false, errorCodes: ["missing_input_token"] };
   }
 
@@ -30,7 +27,6 @@ export async function validateTurnstileToken(
     process.env.NODE_ENV === "development" &&
     token === "development-bypass"
   ) {
-    console.log("Turnstile validation bypassed with development token");
     return { success: true };
   }
 
@@ -42,13 +38,6 @@ export async function validateTurnstileToken(
     if (remoteIp) {
       formData.append("remoteip", remoteIp);
     }
-
-    console.log("Making Turnstile validation request:", {
-      hasSecret: !!secretKey,
-      hasToken: !!token,
-      remoteIp,
-      environment: process.env.NODE_ENV,
-    });
 
     const response = await fetch(
       "https://challenges.cloudflare.com/turnstile/v0/siteverify",
@@ -62,27 +51,12 @@ export async function validateTurnstileToken(
     );
 
     if (!response.ok) {
-      console.error("Turnstile validation request failed:", {
-        status: response.status,
-        statusText: response.statusText,
-        environment: process.env.NODE_ENV,
-      });
       return { success: false, errorCodes: ["request_failed"] };
     }
 
     const result = await response.json();
 
-    console.log("Turnstile validation response:", {
-      success: result.success,
-      errorCodes: result["error-codes"],
-      environment: process.env.NODE_ENV,
-    });
-
     if (!result.success) {
-      console.error("Turnstile validation failed:", {
-        errorCodes: result["error-codes"],
-        environment: process.env.NODE_ENV,
-      });
       return {
         success: false,
         errorCodes: result["error-codes"] || ["validation_failed"],
@@ -90,11 +64,7 @@ export async function validateTurnstileToken(
     }
 
     return { success: true };
-  } catch (error) {
-    console.error("Turnstile validation error:", {
-      error: error instanceof Error ? error.message : String(error),
-      environment: process.env.NODE_ENV,
-    });
+  } catch {
     return { success: false, errorCodes: ["network_error"] };
   }
 }

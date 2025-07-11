@@ -5,18 +5,12 @@ import { createJwtKey } from "../../../operations/securityOperations";
 function getJwtKey() {
   const jwtSecret = process.env.JWT_SECRET;
   if (!jwtSecret) {
-    console.error("JWT_SECRET is not set in environment");
     throw new Error("JWT_SECRET is not set");
   }
-
+  
   try {
     return createJwtKey(jwtSecret);
   } catch (error) {
-    console.error("Failed to create JWT key:", {
-      error: error instanceof Error ? error.message : String(error),
-      hasSecret: !!jwtSecret,
-      secretLength: jwtSecret?.length,
-    });
     throw error;
   }
 }

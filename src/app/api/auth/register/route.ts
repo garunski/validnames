@@ -15,35 +15,16 @@ import { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
-    // Log registration attempt for debugging
-    console.log("Registration attempt - Environment check:", {
-      nodeEnv: process.env.NODE_ENV,
-      hasJwtSecret: !!process.env.JWT_SECRET,
-      hasTurnstileSecret: !!process.env.TURNSTILE_SECRET_KEY,
-      hasDatabaseUrl: !!process.env.DATABASE_URL,
-    });
-
     const validation = await validateRequestBody(
       userRegistrationSchema,
       request,
     );
 
     if (!validation.success) {
-      console.log("Registration validation failed:", validation.errors);
       return errorResponses.validationError(validation.errors!);
     }
 
     const { email, password, name, turnstileToken } = validation.data!;
-
-    // Log Turnstile validation attempt
-    console.log("Registration Turnstile validation attempt:", {
-      hasToken: !!turnstileToken,
-      tokenLength: turnstileToken?.length,
-      clientIp:
-        request.headers.get("x-forwarded-for") ||
-        request.headers.get("x-real-ip") ||
-        "unknown",
-    });
 
     // Validate Turnstile token using the extracted token directly
     const turnstileValidation = await validateTurnstileTokenDirectly(
@@ -52,16 +33,8 @@ export async function POST(request: NextRequest) {
     );
 
     if (!turnstileValidation.success) {
-      console.error("Registration Turnstile validation failed:", {
-        errorMessage: turnstileValidation.errorMessage,
-        environment: process.env.NODE_ENV,
-      });
       throw new UnauthorizedError(turnstileValidation.errorMessage!);
     }
-
-    console.log(
-      "Registration Turnstile validation successful, proceeding with user creation",
-    );
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -69,7 +42,6 @@ export async function POST(request: NextRequest) {
     });
 
     if (existingUser) {
-      console.log("User already exists during registration:", { email });
       throw new ConflictError("User already exists");
     }
 
@@ -85,8 +57,6 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    console.log("User created successfully:", { email, userId: user.id });
-
     // Send verification email
     const token = await generateEmailVerificationToken(user.id);
     await sendEmailVerification(user.email, user.name || "User", token);
@@ -99,11 +69,6 @@ export async function POST(request: NextRequest) {
       201,
     );
   } catch (error) {
-    console.error("Registration error details:", {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-      environment: process.env.NODE_ENV,
-    });
     return handleError(error);
   }
 }
