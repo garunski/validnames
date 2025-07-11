@@ -1,5 +1,5 @@
 import EmailVerificationTemplate from "@/components/emails/EmailVerificationTemplate";
-import { resend } from "@/lib/resend";
+import { resend } from "@/email/resendClient";
 
 export async function sendEmailVerification(
   email: string,

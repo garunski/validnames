@@ -9,7 +9,7 @@ import { fetchWithAuth } from "@/hooks/fetchWithAuth";
 import type { Application, Category, Domain } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useToastNotifications } from "../hooks/useToastNotifications";
 import { CategoryDeleteDialog } from "./CategoryDeleteDialog";
 import { CategoryHeader } from "./CategoryHeader";
 
@@ -33,13 +33,6 @@ interface CategoryContentProps {
   onCategoryDeleted?: () => void;
 }
 
-type ToastItem = {
-  id: string;
-  message: string;
-  type: "success" | "error";
-  isVisible: boolean;
-};
-
 export function CategoryContent({
   selectedCategory,
   domains,
@@ -61,28 +54,9 @@ export function CategoryContent({
   const hasSelectedTlds = selectedTlds.length > 0;
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [toasts, setToasts] = useState<ToastItem[]>([]);
   const queryClient = useQueryClient();
-
-  const showFavoriteMessage = (message: string, type: "success" | "error") => {
-    const id = uuidv4();
-    setToasts((prev) => {
-      const newToasts = [...prev, { id, message, type, isVisible: true }];
-      // Keep only the last 3 toasts (newest)
-      return newToasts.slice(-3);
-    });
-  };
-
-  // Called by each toast when it should hide (after timer)
-  const handleToastHide = (id: string) => {
-    setToasts((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, isVisible: false } : t)),
-    );
-    // Remove after animation
-    setTimeout(() => {
-      setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, 350);
-  };
+  const { toasts, showFavoriteMessage, handleToastHide } =
+    useToastNotifications();
 
   const handleCheckDomainsClick = () => {
     onCheckDomains();

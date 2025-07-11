@@ -1,5 +1,5 @@
 import PasswordResetTemplate from "@/components/emails/PasswordResetTemplate";
-import { resend } from "@/lib/resend";
+import { resend } from "@/email/resendClient";
 
 export async function sendPasswordReset(
   email: string,

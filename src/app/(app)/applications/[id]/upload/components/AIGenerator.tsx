@@ -5,7 +5,10 @@ import { Input } from "@/primitives/input";
 import { DocumentDuplicateIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import { PROMPT_CATEGORIES, generateAiPrompt } from "./AIPromptGenerator";
+import { ErrorDisplay } from "./ErrorDisplay";
 import { FavoritesList } from "./FavoritesList";
+import { PromptPreview } from "./PromptPreview";
+import { PromptStyleSelector } from "./PromptStyleSelector";
 
 interface AIGeneratorProps {
   aiTopic: string;
@@ -58,24 +61,6 @@ export function AIGenerator({
     onTopicChange(e.target.value);
   };
 
-  const PROMPT_STYLE_ICONS: Record<string, string> = {
-    creative: "🎨",
-    professional: "🏢",
-    technical: "💻",
-    playful: "🎲",
-    minimalist: "⚡",
-    variations: "🔀",
-  };
-
-  const PROMPT_STYLE_DESCRIPTIONS: Record<string, string> = {
-    creative: "Imaginative, brandable names",
-    professional: "Authoritative, credible names",
-    technical: "Tech-forward, modern names",
-    playful: "Fun, playful, lighthearted names",
-    minimalist: "Short, simple, clean names",
-    variations: "Generate variations for each input",
-  };
-
   return (
     <section id="prompt-generator">
       <div className="flex gap-6">
@@ -123,96 +108,21 @@ export function AIGenerator({
           />
 
           {/* Error/Success Messages */}
-          {error && (
-            <div className="animate-fade-in mb-4 flex w-fit items-center gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-600 shadow-sm dark:border-red-800 dark:bg-red-900/30">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 text-red-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8v4m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"
-                />
-              </svg>
-              <span>{error}</span>
-            </div>
-          )}
+          <ErrorDisplay error={error} />
 
           {/* Prompt Category Tabs */}
-          <div className="-mx-6 my-4 border-t border-zinc-200 dark:border-zinc-700" />
-          <div className="mb-4">
-            <div className="mb-2 font-semibold">Prompt Style</div>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
-              {PROMPT_CATEGORIES.map((cat) => (
-                <button
-                  key={cat.key}
-                  onClick={() => setSelectedCategory(cat.key)}
-                  className={`flex min-h-[120px] w-full cursor-pointer flex-col items-center justify-between rounded-lg border p-3 transition-all duration-200 ease-out ${selectedCategory === cat.key ? "animate-glow border-blue-600 bg-blue-50 shadow-sm" : "border-zinc-200 bg-white hover:bg-zinc-50"} focus:ring-2 focus:ring-blue-400 focus:outline-none`}
-                  aria-pressed={selectedCategory === cat.key}
-                  type="button"
-                >
-                  <span className="mb-1 text-2xl">
-                    {PROMPT_STYLE_ICONS[cat.key]}
-                  </span>
-                  <span className="text-sm font-medium">{cat.label}</span>
-                  <span className="mt-1 text-center text-xs text-zinc-500">
-                    {PROMPT_STYLE_DESCRIPTIONS[cat.key]}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="-mx-6 my-4 border-t border-zinc-200 dark:border-zinc-700" />
+          <PromptStyleSelector
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+          />
 
           {/* Preview Format Toggle */}
-          <div className="flex items-center justify-between">
-            <div className="font-semibold">Prompt Preview</div>
-            <div className="flex overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-700">
-              <button
-                onClick={() => setPreviewFormat("html")}
-                className={`cursor-pointer px-3 py-1.5 text-sm font-medium transition-colors ${
-                  previewFormat === "html"
-                    ? "bg-blue-500 text-white"
-                    : "bg-white text-zinc-600 hover:bg-zinc-50 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
-                }`}
-                type="button"
-              >
-                HTML
-              </button>
-              <button
-                onClick={() => setPreviewFormat("markdown")}
-                className={`cursor-pointer px-3 py-1.5 text-sm font-medium transition-colors ${
-                  previewFormat === "markdown"
-                    ? "bg-blue-500 text-white"
-                    : "bg-white text-zinc-600 hover:bg-zinc-50 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
-                }`}
-                type="button"
-              >
-                Markdown
-              </button>
-            </div>
-          </div>
-
-          {/* Prompt Preview */}
-          <div className="pt-4">
-            {previewFormat === "markdown" ? (
-              <pre className="rounded-md border border-zinc-200 bg-zinc-50 px-4 py-4 font-mono text-xs whitespace-pre-wrap text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200">
-                {generateAiPrompt(aiTopic, selectedCategory, "markdown")}
-              </pre>
-            ) : (
-              <div
-                className="prose prose-sm dark:prose-invert max-w-none rounded-md border border-zinc-200 bg-zinc-50 px-4 py-4 text-sm text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200"
-                dangerouslySetInnerHTML={{
-                  __html: generateAiPrompt(aiTopic, selectedCategory, "html"),
-                }}
-              />
-            )}
-          </div>
+          <PromptPreview
+            aiTopic={aiTopic}
+            selectedCategory={selectedCategory}
+            previewFormat={previewFormat}
+            onPreviewFormatChange={setPreviewFormat}
+          />
         </div>
 
         {/* Favorites List on the right */}

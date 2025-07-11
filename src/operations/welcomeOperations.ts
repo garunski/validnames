@@ -1,5 +1,5 @@
 import WelcomeEmailTemplate from "@/components/emails/WelcomeEmailTemplate";
-import { resend } from "@/lib/resend";
+import { resend } from "@/email/resendClient";
 
 export async function sendWelcomeEmail(email: string, userName: string) {
   const loginLink = `${process.env.NEXT_PUBLIC_APP_URL}/login`;
