@@ -3,6 +3,7 @@
 import { Card } from "@/components/Card";
 import { FeatureErrorBoundary } from "@/components/FeatureErrorBoundary";
 import { FormBuilder } from "@/components/forms/FormBuilder";
+import { createTurnstileValidator } from "@/components/forms/turnstileValidation";
 import { validatePassword } from "@/validators/emailValidation";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -47,6 +48,14 @@ function ResetPasswordContent() {
         placeholder: "Confirm new password",
         required: true,
         validate: validateConfirmPassword,
+      },
+      {
+        name: "turnstileToken",
+        type: "turnstile" as const,
+        placeholder: "",
+        required: true,
+        siteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "",
+        validate: createTurnstileValidator(),
       },
     ],
     submitText: "Reset Password",

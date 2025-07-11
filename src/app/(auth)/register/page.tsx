@@ -1,6 +1,7 @@
 "use client";
 
 import { FormBuilder } from "@/components/forms/FormBuilder";
+import { createTurnstileValidator } from "@/components/forms/turnstileValidation";
 import { SparklesIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 
@@ -54,6 +55,14 @@ export default function RegisterPage() {
           return undefined;
         },
       },
+      {
+        name: "turnstileToken",
+        type: "turnstile" as const,
+        placeholder: "",
+        required: true,
+        siteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "",
+        validate: createTurnstileValidator(),
+      },
     ],
     submitText: "Create account",
     loadingText: "Creating account...",
@@ -63,7 +72,9 @@ export default function RegisterPage() {
   };
 
   const handleSuccess = () => {
-    router.push("/login?message=Registration successful. Please sign in.");
+    router.push(
+      "/login?message=Registration successful! Please check your email and verify your account before signing in.",
+    );
   };
 
   return (

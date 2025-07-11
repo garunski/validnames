@@ -3,6 +3,7 @@
 import { Card } from "@/components/Card";
 import { FeatureErrorBoundary } from "@/components/FeatureErrorBoundary";
 import { FormBuilder } from "@/components/forms/FormBuilder";
+import { createTurnstileValidator } from "@/components/forms/turnstileValidation";
 import { validateEmail } from "@/validators/emailValidation";
 import { useState } from "react";
 
@@ -18,6 +19,14 @@ function VerifyEmailContent() {
         placeholder: "Enter your email address",
         required: true,
         validate: validateEmail,
+      },
+      {
+        name: "turnstileToken",
+        type: "turnstile" as const,
+        placeholder: "",
+        required: true,
+        siteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "",
+        validate: createTurnstileValidator(),
       },
     ],
     submitText: "Send Verification Email",

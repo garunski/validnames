@@ -2,15 +2,18 @@
 
 import { Input } from "@/primitives/input";
 import { Textarea } from "@/primitives/textarea";
+import { useEffect } from "react";
+import { TurnstileField } from "./TurnstileField";
 
 export interface FormField {
   name: string;
-  type: "text" | "email" | "password" | "number" | "textarea";
+  type: "text" | "email" | "password" | "number" | "textarea" | "turnstile";
   placeholder: string;
   label?: string;
   required?: boolean;
   className?: string;
   rows?: number;
+  siteKey?: string; // For turnstile fields
   validate?: (
     value: string,
     allValues?: Record<string, string>,
@@ -40,7 +43,47 @@ export function FormField({
   const containerClass = isHorizontal ? "flex-1" : "";
   const inputClass = field.className || (isHorizontal ? "flex-1" : "");
 
+  // Handle development bypass for Turnstile fields
+  useEffect(() => {
+    if (field.type === "turnstile") {
+      const isDevelopment = process.env.NODE_ENV === "development";
+      const hasSiteKey = field.siteKey && field.siteKey !== "";
+
+      if (isDevelopment && !hasSiteKey && value !== "development-bypass") {
+        onChange("development-bypass");
+      }
+    }
+  }, [field.type, field.siteKey, value, onChange]);
+
   const renderInput = () => {
+    if (field.type === "turnstile") {
+      // Skip Turnstile in development if no site key is configured
+      const isDevelopment = process.env.NODE_ENV === "development";
+      const hasSiteKey = field.siteKey && field.siteKey !== "";
+
+      if (isDevelopment && !hasSiteKey) {
+        // In development without site key, render a hidden input with a dummy value
+        return (
+          <input
+            type="hidden"
+            value="development-bypass"
+            onChange={() => onChange("development-bypass")}
+          />
+        );
+      }
+
+      return (
+        <TurnstileField
+          siteKey={field.siteKey || ""}
+          onVerify={(token) => onChange(token)}
+          onExpire={() => onChange("")}
+          onError={() => onChange("")}
+          disabled={isLoading}
+          className={inputClass}
+        />
+      );
+    }
+
     if (field.type === "textarea") {
       return (
         <Textarea

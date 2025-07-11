@@ -5,11 +5,13 @@ export const userRegistrationSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
   name: z.string().min(1, "Name is required"),
+  turnstileToken: z.string().min(1, "Please complete the security check"),
 });
 
 export const userLoginSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(1, "Password is required"),
+  turnstileToken: z.string().min(1, "Please complete the security check"),
 });
 
 export const userProfileUpdateSchema = z.object({

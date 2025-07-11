@@ -1,6 +1,7 @@
 "use client";
 
 import { FormBuilder } from "@/components/forms/FormBuilder";
+import { createTurnstileValidator } from "@/components/forms/turnstileValidation";
 import { UserGroupIcon } from "@heroicons/react/24/outline";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -33,6 +34,14 @@ function LoginPage() {
           if (!value.trim()) return "Password is required";
           return undefined;
         },
+      },
+      {
+        name: "turnstileToken",
+        type: "turnstile" as const,
+        placeholder: "",
+        required: true,
+        siteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "",
+        validate: createTurnstileValidator(),
       },
     ],
     submitText: "Sign in",

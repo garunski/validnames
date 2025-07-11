@@ -2,17 +2,38 @@ import { prisma } from "@/app/database/client";
 import { rateLimitEmailOperations } from "@/middleware/rateLimitingMiddleware";
 import { sendEmailVerification } from "@/operations/emailVerificationOperations";
 import { generateEmailVerificationToken } from "@/operations/tokenOperations";
+import {
+  getTurnstileErrorMessage,
+  validateTurnstileToken,
+} from "@/operations/turnstileValidationOperations";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 const requestSchema = z.object({
   email: z.string().email(),
+  turnstileToken: z.string().min(1, "Please complete the security check"),
 });
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { email } = requestSchema.parse(body);
+    const { email, turnstileToken } = requestSchema.parse(body);
+
+    // Validate Turnstile token
+    const clientIp =
+      req.headers.get("x-forwarded-for") ||
+      req.headers.get("x-real-ip") ||
+      "unknown";
+    const turnstileValidation = await validateTurnstileToken(
+      turnstileToken,
+      clientIp,
+    );
+    if (!turnstileValidation.success) {
+      const errorMessage = getTurnstileErrorMessage(
+        turnstileValidation.errorCodes || [],
+      );
+      return NextResponse.json({ error: errorMessage }, { status: 401 });
+    }
 
     // Check rate limiting
     const rateLimitResult = await rateLimitEmailOperations(

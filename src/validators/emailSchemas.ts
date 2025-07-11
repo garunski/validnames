@@ -6,6 +6,7 @@ export const emailVerificationSchema = z.object({
 
 export const forgotPasswordSchema = z.object({
   email: z.string().email("Invalid email address"),
+  turnstileToken: z.string().min(1, "Please complete the security check"),
 });
 
 export const resetPasswordSchema = z
@@ -13,6 +14,7 @@ export const resetPasswordSchema = z
     token: z.string().min(1, "Token is required"),
     password: z.string().min(8, "Password must be at least 8 characters"),
     confirmPassword: z.string().min(1, "Please confirm your password"),
+    turnstileToken: z.string().min(1, "Please complete the security check"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -25,6 +27,7 @@ export const resendEmailSchema = z.object({
 
 export const emailVerificationRequestSchema = z.object({
   email: z.string().email("Invalid email address"),
+  turnstileToken: z.string().min(1, "Please complete the security check"),
 });
 
 export const tokenValidationSchema = z.object({

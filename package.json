@@ -33,6 +33,7 @@
     "next": "^15.3.5",
     "react": "^19.1.0",
     "react-hot-toast": "^2.5.2",
+    "react-turnstile": "^1.1.4",
     "resend": "^4.6.0",
     "uuid": "^11.1.0",
     "whoiser": "^1.18.0",

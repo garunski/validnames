@@ -121,6 +121,7 @@ npx prisma migrate dev --name add-email-verification
 - Node.js 18+
 - PostgreSQL database
 - Resend account and API key
+- Cloudflare Turnstile account and keys
 - npm or yarn
 
 ### Installation
@@ -142,7 +143,7 @@ npm install
 
 ```bash
 cp .env.example .env
-# Edit .env with your PostgreSQL DATABASE_URL and Resend configuration
+# Edit .env with your PostgreSQL DATABASE_URL, Resend, and Cloudflare Turnstile configuration
 ```
 
 4. Initialize the database:
@@ -284,6 +285,7 @@ User → Application → Category → Domain → Check Results
 - Email rate limiting
 - Secure token generation and validation
 - CSRF protection for sensitive operations
+- Cloudflare Turnstile bot protection on login and registration
 
 ## License
 
