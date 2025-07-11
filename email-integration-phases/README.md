@@ -65,9 +65,9 @@ This folder contains the phased implementation plan for adding email verificatio
 - **Tasks**: 33-36
 - **Focus**: Testing flows, edge cases, email template previews
 
-### Phase 9: Final Polish and Documentation
+### Phase 8: Final Polish and Documentation
 
-- **File**: `phase-9-final-polish.md`
+- **File**: `phase-8-final-polish.md`
 - **Tasks**: 37-40
 - **Focus**: Styling, environment validation, documentation, logging
 
@@ -80,7 +80,7 @@ This folder contains the phased implementation plan for adding email verificatio
 5. **Frontend Integration**: Phase 5 (User interface)
 6. **Security & UX**: Phase 6-7 (Polish and security)
 7. **Testing**: Phase 8 (Validation)
-8. **Final Polish**: Phase 9 (Documentation and cleanup)
+8. **Final Polish**: Phase 8 (Documentation and cleanup)
 
 ## Notes for AI Implementation
 
