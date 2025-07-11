@@ -1,6 +1,6 @@
 import { createSession } from "@/app/api/auth/authOperations";
 import { prisma } from "@/app/database/client";
-import { validateStandardTurnstileToken } from "@/operations/authenticationOperations";
+import { validateTurnstileTokenDirectly } from "@/operations/authenticationOperations";
 import { handleError } from "@/validators/apiErrorResponse";
 import { UnauthorizedError } from "@/validators/apiErrorTypes";
 import {
@@ -20,10 +20,13 @@ export async function POST(request: NextRequest) {
       return errorResponses.validationError(validation.errors!);
     }
 
-    const { email, password } = validation.data!;
+    const { email, password, turnstileToken } = validation.data!;
 
-    // Validate Turnstile token using shared operation
-    const turnstileValidation = await validateStandardTurnstileToken(request);
+    // Validate Turnstile token using the extracted token
+    const turnstileValidation = await validateTurnstileTokenDirectly(
+      turnstileToken,
+      request,
+    );
 
     if (!turnstileValidation.success) {
       throw new UnauthorizedError(turnstileValidation.errorMessage!);
