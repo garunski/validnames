@@ -20,7 +20,8 @@ export function handleError(error: unknown): NextResponse {
   }
 
   if (error instanceof UnauthorizedError) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    // Return the actual error message, not just 'Unauthorized'
+    return NextResponse.json({ error: error.message }, { status: 401 });
   }
 
   if (error instanceof NotFoundError) {

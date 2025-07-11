@@ -69,7 +69,7 @@ function VerifyEmailSuccessContent() {
           <p className="mb-6 text-red-600">{error}</p>
           <button
             onClick={() => router.push("/verify-email")}
-            className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+            className="cursor-pointer rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
           >
             Try Again
           </button>
@@ -92,7 +92,7 @@ function VerifyEmailSuccessContent() {
         </p>
         <button
           onClick={() => router.push("/login")}
-          className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+          className="cursor-pointer rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
           Go to Login
         </button>

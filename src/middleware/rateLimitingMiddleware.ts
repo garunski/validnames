@@ -1,14 +1,11 @@
 import { checkEmailRateLimit } from "@/operations/rateLimitingOperations";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 export async function rateLimitEmailOperations(
-  req: NextRequest,
+  email: string,
   type: "verification" | "passwordReset",
 ): Promise<NextResponse | null> {
   try {
-    const body = await req.json();
-    const email = body.email;
-
     if (!email) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }

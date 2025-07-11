@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
     // Check rate limiting
     const rateLimitResult = await rateLimitEmailOperations(
-      req,
+      email,
       "passwordReset",
     );
     if (rateLimitResult) {

@@ -21,10 +21,11 @@ export interface FormConfig {
 
 interface FormBuilderProps {
   config: FormConfig;
-  onSuccess: (data?: unknown) => void;
+  onSuccess: (data?: unknown, formValues?: Record<string, string>) => void;
   onCancel?: () => void;
   additionalData?: Record<string, unknown>;
   initialValues?: Record<string, string>;
+  onGeneralError?: (error: string | null) => void;
 }
 
 export function FormBuilder({
@@ -33,6 +34,7 @@ export function FormBuilder({
   onCancel,
   additionalData = {},
   initialValues = {},
+  onGeneralError,
 }: FormBuilderProps) {
   const [formData, setFormData] =
     useState<Record<string, string>>(initialValues);
@@ -61,19 +63,21 @@ export function FormBuilder({
         });
       }
       resetForm();
-      onSuccess(data);
+      onSuccess(data, formData); // Pass both API response and formData
+      if (onGeneralError) onGeneralError(null);
     },
     onError: async (error: unknown) => {
       const { fieldErrors, generalError: errorMessage } =
         processFormError(error);
       setErrors((prev) => ({ ...prev, ...fieldErrors }));
       setGeneralError(errorMessage);
+      if (onGeneralError) onGeneralError(errorMessage);
     },
   });
 
   const handleBlur = (field: FormFieldType) => {
     const value = formData[field.name] || "";
-    const error = field.validate ? field.validate(value) : undefined;
+    const error = field.validate ? field.validate(value, formData) : undefined;
     setErrors((prev) => ({ ...prev, [field.name]: error }));
   };
 
@@ -109,7 +113,8 @@ export function FormBuilder({
   return (
     <div className={`rounded-lg p-6 ${config.containerClassName || ""}`}>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {generalError && (
+        {/* Only show generalError here if onGeneralError is not provided */}
+        {!onGeneralError && generalError && (
           <div className="mb-4 rounded border border-red-200 bg-red-50 px-3 py-2 text-center text-sm text-red-700">
             {generalError}
           </div>

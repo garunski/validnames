@@ -11,7 +11,10 @@ export interface FormField {
   required?: boolean;
   className?: string;
   rows?: number;
-  validate?: (value: string) => string | undefined;
+  validate?: (
+    value: string,
+    allValues?: Record<string, string>,
+  ) => string | undefined;
 }
 
 interface FormFieldProps {

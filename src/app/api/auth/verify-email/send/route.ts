@@ -15,7 +15,10 @@ export async function POST(req: NextRequest) {
     const { email } = requestSchema.parse(body);
 
     // Check rate limiting
-    const rateLimitResult = await rateLimitEmailOperations(req, "verification");
+    const rateLimitResult = await rateLimitEmailOperations(
+      email,
+      "verification",
+    );
     if (rateLimitResult) {
       return rateLimitResult;
     }

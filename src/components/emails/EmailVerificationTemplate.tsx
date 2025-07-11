@@ -26,12 +26,13 @@ export default function EmailVerificationTemplate({
       </Section>
 
       <Text style={emailStyles.text}>
-        This verification link will expire in 24 hours. If you didn&apos;t create an
-        account with Valid Names, you can safely ignore this email.
+        This verification link will expire in 24 hours. If you didn&apos;t
+        create an account with Valid Names, you can safely ignore this email.
       </Text>
 
       <Text style={emailStyles.footer}>
-        If the button doesn&apos;t work, copy and paste this link into your browser:
+        If the button doesn&apos;t work, copy and paste this link into your
+        browser:
         <br />
         <a href={verificationLink} style={{ color: "#3b82f6" }}>
           {verificationLink}

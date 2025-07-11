@@ -21,13 +21,14 @@ function ResetPasswordContent() {
     }
   });
 
-  const validateConfirmPassword = (confirmPassword: string) => {
+  const validateConfirmPassword = (
+    confirmPassword: string,
+    allValues?: Record<string, string>,
+  ) => {
     if (!confirmPassword.trim()) return "Please confirm your password";
-    // Access the password value from the formData state
-    const passwordValue =
-      (document.querySelector('input[name="password"]') as HTMLInputElement)
-        ?.value || "";
-    if (passwordValue !== confirmPassword) return "Passwords do not match";
+    if (allValues && confirmPassword !== allValues["password"]) {
+      return "Passwords do not match";
+    }
     return undefined;
   };
 
@@ -71,7 +72,7 @@ function ResetPasswordContent() {
           </p>
           <button
             onClick={() => router.push("/forgot-password")}
-            className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+            className="cursor-pointer rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
           >
             Request New Reset Link
           </button>
@@ -95,7 +96,7 @@ function ResetPasswordContent() {
           </p>
           <button
             onClick={() => router.push("/login")}
-            className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+            className="cursor-pointer rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
           >
             Go to Login
           </button>

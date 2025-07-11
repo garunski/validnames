@@ -75,7 +75,7 @@ export function StyledEmailLayout({ children, title }: StyledEmailProps) {
                 margin: 0,
               }}
             >
-              © 2024 Valid Names. All rights reserved.
+              © {new Date().getFullYear()} Garunski. All rights reserved.
             </Text>
             <Text
               style={{

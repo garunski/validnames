@@ -27,16 +27,14 @@ function VerifyEmailContent() {
     layout: "vertical" as const,
   };
 
-  const handleSuccess = (data?: unknown) => {
+  // Capture the email from the form input
+  const handleSuccess = (
+    _data: unknown,
+    formValues?: Record<string, string>,
+  ) => {
     setSuccess(true);
-    // Extract email from form data or use empty string
-    if (
-      data &&
-      typeof data === "object" &&
-      "email" in data &&
-      typeof (data as { email: string }).email === "string"
-    ) {
-      setEmail((data as { email: string }).email);
+    if (formValues && typeof formValues.email === "string") {
+      setEmail(formValues.email);
     }
   };
 
@@ -48,7 +46,7 @@ function VerifyEmailContent() {
             Verification Email Sent
           </h1>
           <p className="mb-4 text-green-600">
-            We&#39;ve sent a verification email to {email}
+            We&apos;ve sent a verification email to {email}
           </p>
           <p className="mb-6 text-sm text-gray-600">
             Please check your inbox and click the verification link to complete

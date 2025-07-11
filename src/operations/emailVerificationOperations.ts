@@ -6,7 +6,7 @@ export async function sendEmailVerification(
   userName: string,
   token: string,
 ) {
-  const verificationLink = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${token}`;
+  const verificationLink = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email/success?token=${token}`;
 
   const { data, error } = await resend.emails.send({
     from: process.env.RESEND_FROM_EMAIL!,

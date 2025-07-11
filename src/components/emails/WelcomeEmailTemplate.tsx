@@ -29,10 +29,6 @@ export default function WelcomeEmailTemplate({
           Get Started
         </Button>
       </Section>
-
-      <Text style={emailStyles.footer}>
-        If you have any questions, feel free to reach out to our support team.
-      </Text>
     </StyledEmailLayout>
   );
 }

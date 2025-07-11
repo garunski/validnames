@@ -1,8 +1,12 @@
 import { FormField } from "./FormField";
 
-export function validateField(field: FormField, value: string) {
+export function validateField(
+  field: FormField,
+  value: string,
+  allValues?: Record<string, string>,
+) {
   if (field.validate) {
-    return field.validate(value);
+    return field.validate(value, allValues);
   }
   return undefined;
 }
@@ -14,7 +18,7 @@ export function validateAllFields(
   const errors: Record<string, string | undefined> = {};
   fields.forEach((field) => {
     const value = formData[field.name] || "";
-    const error = validateField(field, value);
+    const error = validateField(field, value, formData);
     if (error) {
       errors[field.name] = error;
     }
