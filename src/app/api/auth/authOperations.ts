@@ -1,8 +1,11 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import { getEnvironmentConfig } from "../../../operations/environmentValidationOperations";
+import { createJwtKey } from "../../../operations/securityOperations";
 
-const secretKey = process.env.JWT_SECRET || "your-secret-key";
-const key = new TextEncoder().encode(secretKey);
+// Get validated JWT secret from environment
+const { jwtSecret } = getEnvironmentConfig();
+const key = createJwtKey(jwtSecret);
 
 export async function encrypt(payload: { userId: string; expires: Date }) {
   return await new SignJWT(payload)

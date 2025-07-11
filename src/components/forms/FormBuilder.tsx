@@ -3,7 +3,7 @@
 import { fetchWithAuth } from "@/hooks/fetchWithAuth";
 import { Button } from "@/primitives/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { processFormError } from "./FormErrorProcessor";
 import { FormField, type FormField as FormFieldType } from "./FormField";
 import { hasValidationErrors, validateAllFields } from "./FormValidation";
@@ -40,14 +40,29 @@ export function FormBuilder({
     useState<Record<string, string>>(initialValues);
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const [generalError, setGeneralError] = useState<string | null>(null);
+  const [csrfToken, setCsrfToken] = useState<string>("");
   const queryClient = useQueryClient();
+
+  // Fetch CSRF token on mount
+  useEffect(() => {
+    async function fetchCsrfToken() {
+      try {
+        const res = await fetch("/api/auth/csrfToken");
+        const data = await res.json();
+        if (data.csrfToken) setCsrfToken(data.csrfToken);
+      } catch {
+        // Optionally handle error
+      }
+    }
+    fetchCsrfToken();
+  }, []);
 
   const mutation = useMutation({
     mutationFn: async (data: Record<string, unknown>) => {
       const response = await fetchWithAuth(config.endpoint, {
         method: config.method || "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, ...additionalData }),
+        body: JSON.stringify({ ...data, ...additionalData, csrfToken }),
       });
 
       if (response.error) {

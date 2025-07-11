@@ -1,7 +1,79 @@
-import { randomBytes } from "crypto";
+import crypto from "crypto";
 
-export function generateSecureToken(): string {
-  return randomBytes(32).toString("hex");
+/**
+ * Generates a cryptographically secure random string for use as JWT secret
+ * @param length - Length of the secret (default: 64)
+ * @returns Cryptographically secure random string
+ */
+export function generateSecureSecret(length: number = 64): string {
+  return crypto.randomBytes(length).toString("hex");
+}
+
+/**
+ * Validates JWT secret requirements
+ * @param secret - The JWT secret to validate
+ * @returns Validation result with error message if invalid
+ */
+export function validateJwtSecret(secret: string): {
+  isValid: boolean;
+  error?: string;
+} {
+  if (!secret) {
+    return { isValid: false, error: "JWT_SECRET is required" };
+  }
+
+  if (secret.length < 32) {
+    return {
+      isValid: false,
+      error: "JWT_SECRET must be at least 32 characters long",
+    };
+  }
+
+  // Check if it's the default fallback value
+  if (secret === "your-secret-key") {
+    return {
+      isValid: false,
+      error: "JWT_SECRET cannot use the default fallback value",
+    };
+  }
+
+  // Check for common weak patterns
+  const weakPatterns = [
+    "secret",
+    "key",
+    "password",
+    "123",
+    "admin",
+    "test",
+    "dev",
+    "development",
+  ];
+
+  const lowerSecret = secret.toLowerCase();
+  for (const pattern of weakPatterns) {
+    if (lowerSecret.includes(pattern)) {
+      return {
+        isValid: false,
+        error: `JWT_SECRET contains potentially weak pattern: ${pattern}`,
+      };
+    }
+  }
+
+  return { isValid: true };
+}
+
+/**
+ * Creates a secure JWT key from the provided secret
+ * @param secret - The JWT secret
+ * @returns TextEncoder instance for JWT operations
+ */
+export function createJwtKey(secret: string): Uint8Array {
+  const validation = validateJwtSecret(secret);
+  if (!validation.isValid) {
+    throw new Error(`Invalid JWT secret: ${validation.error}`);
+  }
+
+  return new TextEncoder().encode(secret);
 }
 
 export function sanitizeEmail(email: string): string {

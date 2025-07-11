@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { passwordSchema } from "./passwordPolicyValidator";
 
 export const emailVerificationSchema = z.object({
   token: z.string().min(1, "Token is required"),
@@ -12,7 +13,7 @@ export const forgotPasswordSchema = z.object({
 export const resetPasswordSchema = z
   .object({
     token: z.string().min(1, "Token is required"),
-    password: z.string().min(8, "Password must be at least 8 characters"),
+    password: passwordSchema,
     confirmPassword: z.string().min(1, "Please confirm your password"),
     turnstileToken: z.string().min(1, "Please complete the security check"),
   })
@@ -40,7 +41,7 @@ export const passwordResetRequestSchema = z.object({
 
 export const passwordResetSchema = z.object({
   token: z.string().min(1, "Token is required"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: passwordSchema,
 });
 
 // Response schemas for consistent API responses

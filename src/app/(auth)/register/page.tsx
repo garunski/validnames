@@ -1,13 +1,16 @@
 "use client";
 
 import { FormBuilder } from "@/components/forms/FormBuilder";
+import { PasswordStrengthIndicator } from "@/components/forms/PasswordStrengthIndicator";
 import { createTurnstileValidator } from "@/components/forms/turnstileValidation";
 import { Link } from "@/primitives/link";
 import { SparklesIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const [password, setPassword] = useState("");
 
   const config = {
     fields: [
@@ -43,6 +46,7 @@ export default function RegisterPage() {
           if (value.length < 8) return "Password must be at least 8 characters";
           return undefined;
         },
+        onChange: (value: string) => setPassword(value),
       },
       {
         name: "confirmPassword",
@@ -95,6 +99,9 @@ export default function RegisterPage() {
           </p>
         </div>
         <FormBuilder config={config} onSuccess={handleSuccess} />
+        <div className="my-4">
+          <PasswordStrengthIndicator password={password} />
+        </div>
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-600">
             Already have an account?{" "}

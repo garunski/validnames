@@ -5,6 +5,7 @@ A modern domain availability checking application built with Next.js 15, TypeScr
 ## 🚀 Features
 
 ### Core Functionality
+
 - **Domain Availability Checking**: Check domain availability across hundreds of TLDs
 - **Batch Processing**: Check multiple domains against multiple TLDs simultaneously
 - **Background Jobs**: Long-running domain checks with real-time progress tracking
@@ -12,6 +13,7 @@ A modern domain availability checking application built with Next.js 15, TypeScr
 - **Bulk Upload**: Import domains via JSON files with AI-powered suggestions
 
 ### Authentication & Security
+
 - **JWT-based Authentication**: Secure session management with httpOnly cookies
 - **Email Verification**: Complete email verification flow with professional templates
 - **Password Reset**: Secure password reset functionality via email
@@ -19,6 +21,7 @@ A modern domain availability checking application built with Next.js 15, TypeScr
 - **Bot Protection**: Cloudflare Turnstile integration for login and registration
 
 ### User Experience
+
 - **Modern UI**: Clean, responsive interface using custom primitives
 - **Real-time Results**: Get instant feedback on domain availability
 - **Progress Tracking**: Monitor background job progress and results
@@ -42,6 +45,7 @@ A modern domain availability checking application built with Next.js 15, TypeScr
 ## 📊 Database Schema
 
 ### Core Models
+
 - **User**: User accounts with authentication and email verification
 - **Application**: Top-level container for organizing domains
 - **Category**: Groups of domains within applications
@@ -50,12 +54,14 @@ A modern domain availability checking application built with Next.js 15, TypeScr
 - **Check**: Domain availability check results with batch support
 
 ### Authentication Models
+
 - **EmailVerificationToken**: Tokens for email verification
 - **PasswordResetToken**: Tokens for password reset
 - **EmailRateLimit**: Rate limiting for email operations
 - **UserSettings**: User preferences and TLD selections
 
 ### Job Management
+
 - **BackgroundJob**: Long-running job tracking with progress monitoring
 
 ## 🚀 Getting Started
@@ -71,17 +77,20 @@ A modern domain availability checking application built with Next.js 15, TypeScr
 ### Installation
 
 1. **Clone the repository**:
+
 ```bash
 git clone <repository-url>
 cd validnames
 ```
 
 2. **Install dependencies**:
+
 ```bash
 npm install
 ```
 
 3. **Set up environment variables**:
+
 ```bash
 cp .env.example .env
 # Edit .env with your configuration:
@@ -95,16 +104,19 @@ cp .env.example .env
 ```
 
 4. **Initialize the database**:
+
 ```bash
 npx prisma migrate dev
 ```
 
 5. **Seed the database with TLDs and sample data**:
+
 ```bash
 npm run db:seed
 ```
 
 6. **Start the development server**:
+
 ```bash
 npm run dev
 ```
@@ -301,6 +313,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 For support and questions:
+
 - Check the documentation above
 - Review the codebase structure
 - Ensure all environment variables are properly configured

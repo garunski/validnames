@@ -3,8 +3,8 @@
 import { Card } from "@/components/Card";
 import { FeatureErrorBoundary } from "@/components/FeatureErrorBoundary";
 import { FormBuilder } from "@/components/forms/FormBuilder";
+import { PasswordStrengthIndicator } from "@/components/forms/PasswordStrengthIndicator";
 import { createTurnstileValidator } from "@/components/forms/turnstileValidation";
-import { validatePassword } from "@/validators/emailValidation";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 
@@ -13,6 +13,7 @@ function ResetPasswordContent() {
   const router = useRouter();
   const [success, setSuccess] = useState(false);
   const [token, setToken] = useState("");
+  const [password, setPassword] = useState("");
 
   // Get token from URL on component mount
   useState(() => {
@@ -40,7 +41,11 @@ function ResetPasswordContent() {
         type: "password" as const,
         placeholder: "Enter new password",
         required: true,
-        validate: validatePassword,
+        validate: (value: string) => {
+          setPassword(value);
+          return undefined;
+        },
+        onChange: (value: string) => setPassword(value),
       },
       {
         name: "confirmPassword",
@@ -127,6 +132,9 @@ function ResetPasswordContent() {
         onSuccess={handleSuccess}
         additionalData={{ token }}
       />
+      <div className="my-4">
+        <PasswordStrengthIndicator password={password} />
+      </div>
     </Card>
   );
 }

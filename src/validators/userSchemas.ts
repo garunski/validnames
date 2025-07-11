@@ -1,9 +1,10 @@
 import { z } from "zod";
+import { passwordSchema } from "./passwordPolicyValidator";
 
 // User schemas
 export const userRegistrationSchema = z.object({
   email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: passwordSchema,
   name: z.string().min(1, "Name is required"),
   turnstileToken: z.string().min(1, "Please complete the security check"),
 });
@@ -29,3 +30,14 @@ export const userProfileUpdateSchema = z.object({
     .toLowerCase()
     .trim(),
 });
+
+export const userPasswordResetSchema = z
+  .object({
+    password: passwordSchema,
+    confirmPassword: z.string().min(1, "Please confirm your password"),
+    token: z.string().min(1, "Reset token is required"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
