@@ -23,7 +23,6 @@ model User {
   settings                  UserSettings?
   emailVerificationTokens   EmailVerificationToken[]
   passwordResetTokens       PasswordResetToken[]
-  emailRateLimits           EmailRateLimit[]
   emailLogs                 EmailLog[]
 
   @@map("users")
@@ -174,10 +173,7 @@ model EmailRateLimit {
   type      String   // 'verification' or 'passwordReset'
   ipAddress String?
   createdAt DateTime @default(now())
-  
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
-  
+
   @@index([email, type, createdAt])
   @@index([ipAddress, type, createdAt])
   @@map("email_rate_limits")

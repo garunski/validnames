@@ -1,4 +1,3 @@
-import { z } from "zod";
 import {
   emailVerificationRequestSchema,
   forgotPasswordSchema,
@@ -32,39 +31,29 @@ export function validateTokenRequest(data: unknown): TokenValidationRequest {
   return tokenValidationSchema.parse(data);
 }
 
-export function validateEmail(email: string): boolean {
-  try {
-    z.string().email().parse(email);
-    return true;
-  } catch {
-    return false;
-  }
+export function validateEmail(email: string): string | undefined {
+  if (!email.trim()) return "Email is required";
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) return "Invalid email address";
+  return undefined;
 }
 
-export function validatePassword(password: string): {
-  isValid: boolean;
-  errors: string[];
-} {
-  const errors: string[] = [];
+export function validatePassword(password: string): string | undefined {
+  if (!password.trim()) return "Password is required";
+  if (password.length < 8) return "Password must be at least 8 characters";
+  if (!/[A-Z]/.test(password))
+    return "Password must contain at least one uppercase letter";
+  if (!/[a-z]/.test(password))
+    return "Password must contain at least one lowercase letter";
+  if (!/\d/.test(password)) return "Password must contain at least one number";
+  return undefined;
+}
 
-  if (password.length < 8) {
-    errors.push("Password must be at least 8 characters long");
-  }
-
-  if (!/[A-Z]/.test(password)) {
-    errors.push("Password must contain at least one uppercase letter");
-  }
-
-  if (!/[a-z]/.test(password)) {
-    errors.push("Password must contain at least one lowercase letter");
-  }
-
-  if (!/\d/.test(password)) {
-    errors.push("Password must contain at least one number");
-  }
-
-  return {
-    isValid: errors.length === 0,
-    errors,
-  };
+export function validateConfirmPassword(
+  password: string,
+  confirmPassword: string,
+): string | undefined {
+  if (!confirmPassword.trim()) return "Please confirm your password";
+  if (password !== confirmPassword) return "Passwords do not match";
+  return undefined;
 }

@@ -1,4 +1,5 @@
 import { prisma } from "@/app/database/client";
+import { rateLimitEmailOperations } from "@/middleware/rateLimitingMiddleware";
 import { sendPasswordReset } from "@/operations/passwordResetOperations";
 import { generatePasswordResetToken } from "@/operations/tokenOperations";
 import { NextRequest, NextResponse } from "next/server";
@@ -12,6 +13,15 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { email } = requestSchema.parse(body);
+
+    // Check rate limiting
+    const rateLimitResult = await rateLimitEmailOperations(
+      req,
+      "passwordReset",
+    );
+    if (rateLimitResult) {
+      return rateLimitResult;
+    }
 
     const user = await prisma.user.findUnique({
       where: { email },
