@@ -3,6 +3,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { usePathname } from "next/navigation";
 import { AppNavbar } from "./components/AppNavbar";
+import { Link } from "@/primitives/link";
 
 export default function RootLayout({
   children,
@@ -33,7 +34,7 @@ export default function RootLayout({
         {children}
       </main>
       <footer className="w-full py-3 text-center text-xs text-zinc-400 select-none dark:text-zinc-600">
-        © <a href="https://garunski.com">Garunski</a> {new Date().getFullYear()}
+        © <a href="https://garunski.com">Garunski</a> · <Link href="/privacy" className="hover:text-zinc-500 dark:hover:text-zinc-300">Privacy</Link> · <Link href="/terms" className="hover:text-zinc-500 dark:hover:text-zinc-300">Terms</Link> {new Date().getFullYear()}
       </footer>
     </div>
   );

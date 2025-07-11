@@ -2,11 +2,13 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  // If accessing login, register, or root path, allow through
+  // If accessing login, register, privacy, terms, or root path, allow through
   if (
     request.nextUrl.pathname === "/" ||
     request.nextUrl.pathname.startsWith("/login") ||
     request.nextUrl.pathname.startsWith("/register") ||
+    request.nextUrl.pathname.startsWith("/privacy") ||
+    request.nextUrl.pathname.startsWith("/terms") ||
     request.nextUrl.pathname.startsWith("/api/auth")
   ) {
     return NextResponse.next();
