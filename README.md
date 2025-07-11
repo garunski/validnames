@@ -5,6 +5,8 @@ A modern domain availability checking application built with Next.js 15, TypeScr
 ## Features
 
 - **User Authentication**: JWT-based auth with httpOnly cookies
+- **Email Verification**: Complete email verification flow with professional templates
+- **Password Reset**: Secure password reset functionality via email
 - **Domain Management**: Organize domains into applications and categories
 - **Batch Checking**: Check multiple domains against multiple TLDs simultaneously
 - **Background Processing**: Long-running domain checks with progress tracking
@@ -18,15 +20,92 @@ A modern domain availability checking application built with Next.js 15, TypeScr
 - **Framework**: Next.js 15 with App Router
 - **Database**: PostgreSQL with Prisma ORM
 - **Authentication**: JWT-based session management
+- **Email Service**: Resend with React Email templates
 - **Styling**: Tailwind CSS v4
 - **Language**: TypeScript
 - **State Management**: React Query (TanStack Query)
 - **Icons**: Heroicons
 - **Deployment**: Vercel-ready
 
+## Email Integration Setup
+
+### Prerequisites
+
+- Resend account with API key
+- Verified domain in Resend
+- Next.js 15+ application
+
+### Environment Variables
+
+```env
+# Required for email functionality
+RESEND_API_KEY=your_resend_api_key
+RESEND_FROM_EMAIL=noreply@yourdomain.com
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+# Optional (for development)
+NODE_ENV=development
+```
+
+### Installation Steps
+
+1. Install dependencies:
+
+```bash
+npm install resend @react-email/components @react-email/render react-hot-toast bcryptjs
+npm install --save-dev @types/crypto @types/bcryptjs
+```
+
+2. Update Prisma schema and run migration:
+
+```bash
+npx prisma migrate dev --name add-email-verification
+```
+
+3. Configure environment variables (see above)
+
+4. Verify domain in Resend dashboard
+
+5. Test email templates using preview route
+
+### Email Templates
+
+- **Verification**: Sent when user registers
+- **Password Reset**: Sent when user requests password reset
+- **Welcome**: Sent after email verification
+
+### Development Tools
+
+- Template Preview: `/api/email/preview?template=verification`
+- Testing API: `/api/test/email` (development only)
+- Email Stats: `/api/test/email` GET request
+
+### Rate Limiting
+
+- Email verification: 5 attempts per hour
+- Password reset: 3 attempts per hour
+- Automatic cleanup of expired tokens
+
+### Security Features
+
+- Cryptographically secure tokens
+- Rate limiting per email address
+- Token expiration (24 hours)
+- Email validation and sanitization
+- Security headers for API routes
+
+### Troubleshooting
+
+- Check Resend API key and domain verification
+- Verify environment variables
+- Test with email preview route
+
 ## Database Schema
 
-- **User**: User accounts with authentication
+- **User**: User accounts with authentication and email verification
+- **EmailVerificationToken**: Tokens for email verification
+- **PasswordResetToken**: Tokens for password reset
+- **EmailRateLimit**: Rate limiting for email operations
 - **Application**: Top-level container for organizing domains
 - **Category**: Groups of domains within applications
 - **Domain**: Individual domains to be checked
@@ -41,6 +120,7 @@ A modern domain availability checking application built with Next.js 15, TypeScr
 
 - Node.js 18+
 - PostgreSQL database
+- Resend account and API key
 - npm or yarn
 
 ### Installation
@@ -62,7 +142,7 @@ npm install
 
 ```bash
 cp .env.example .env
-# Edit .env with your PostgreSQL DATABASE_URL
+# Edit .env with your PostgreSQL DATABASE_URL and Resend configuration
 ```
 
 4. Initialize the database:
@@ -92,6 +172,14 @@ The application will be available at `http://localhost:3000`.
 - Test user: `test@example.com` / `password123`
 - Register new accounts at `/register`
 - Login at `/login`
+- Email verification required for new accounts
+- Password reset available at `/forgot-password`
+
+### Email Flows
+
+1. **Registration**: User registers → verification email sent → user clicks link → account activated
+2. **Password Reset**: User requests reset → reset email sent → user clicks link → new password set
+3. **Email Verification**: Unverified users can request new verification emails
 
 ### Domain Management
 
@@ -158,9 +246,19 @@ npm start
 ### Authentication Flow
 
 1. User registers/logs in via API routes
-2. JWT token stored in httpOnly cookie
-3. Middleware validates session on protected routes
-4. API routes verify user authentication
+2. Email verification sent for new registrations
+3. JWT token stored in httpOnly cookie after verification
+4. Middleware validates session on protected routes
+5. API routes verify user authentication
+
+### Email Flow
+
+1. User action triggers email (registration, password reset)
+2. Token generated and stored in database
+3. Email sent via Resend with React Email template
+4. User clicks link in email
+5. Token validated and action completed
+6. Token deleted from database
 
 ### Domain Checking
 
@@ -183,6 +281,9 @@ User → Application → Category → Domain → Check Results
 - HTTP-only cookies
 - Input validation with Zod schemas
 - User data isolation
+- Email rate limiting
+- Secure token generation and validation
+- CSRF protection for sensitive operations
 
 ## License
 

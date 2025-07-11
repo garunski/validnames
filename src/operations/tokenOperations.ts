@@ -27,6 +27,10 @@ export async function generatePasswordResetToken(
   return token;
 }
 
+/**
+ * Cleans up expired tokens from the database
+ * This should be called periodically (e.g., via cron job)
+ */
 export async function cleanupExpiredTokens(): Promise<void> {
   const now = new Date();
 
