@@ -7,7 +7,7 @@ function getJwtKey() {
   if (!jwtSecret) {
     throw new Error("JWT_SECRET is not set");
   }
-  
+
   try {
     return createJwtKey(jwtSecret);
   } catch (error) {

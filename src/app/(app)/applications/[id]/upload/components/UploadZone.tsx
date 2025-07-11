@@ -1,7 +1,7 @@
 "use client";
 
 import { FeatureErrorBoundary } from "@/components/FeatureErrorBoundary";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import type { FileUploadStatus, UploadResult } from "../uploadTypes";
 import { UploadArea } from "./UploadArea";
@@ -25,6 +25,7 @@ export function UploadZone({
 }: UploadZoneProps) {
   const [dragActive, setDragActive] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const queryClient = useQueryClient();
 
   // React Query mutation for file upload
   const uploadMutation = useMutation({
@@ -44,6 +45,12 @@ export function UploadZone({
       }
 
       return result;
+    },
+    onSuccess: () => {
+      // Invalidate queries to refresh data after successful upload
+      queryClient.invalidateQueries({ queryKey: ["categories", id] });
+      queryClient.invalidateQueries({ queryKey: ["domains"] });
+      queryClient.invalidateQueries({ queryKey: ["application", id] });
     },
   });
 
