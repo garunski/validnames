@@ -1,5 +1,5 @@
-import { randomBytes } from "crypto";
 import { prisma } from "@/app/database/client";
+import { randomBytes } from "crypto";
 
 export async function generateEmailVerificationToken(
   userId: string,
