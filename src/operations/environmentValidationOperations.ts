@@ -1,8 +1,4 @@
-import { validateJwtSecret } from "./securityOperations";
-
 interface EnvironmentConfig {
-  resendApiKey: string;
-  resendFromEmail: string;
   appUrl: string;
   nodeEnv: string;
   jwtSecret: string;
@@ -12,17 +8,29 @@ interface EnvironmentConfig {
 }
 
 /**
- * Validates required environment variables for the entire application.
- * Throws an error if any required variable is missing or invalid.
+ * Validates required environment variables
  * @returns {EnvironmentConfig} The validated environment configuration
  */
 export function validateEnvironment(): EnvironmentConfig {
   const isProduction = process.env.NODE_ENV === "production";
+  const isBuildTime = process.env.NODE_ENV === "production" && !process.env.VERCEL_ENV;
+  
+  // Skip validation during build time on Vercel
+  if (isBuildTime) {
+    return {
+      appUrl: process.env.NEXT_PUBLIC_APP_URL || "",
+      nodeEnv: process.env.NODE_ENV || "development",
+      jwtSecret: process.env.JWT_SECRET || "",
+      turnstileSecretKey: process.env.TURNSTILE_SECRET_KEY || "",
+      turnstileSiteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "",
+      databaseUrl: process.env.DATABASE_URL || "",
+    };
+  }
+
   const requiredVars = {
     DATABASE_URL: process.env.DATABASE_URL,
     JWT_SECRET: process.env.JWT_SECRET,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
-    RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
@@ -48,22 +56,20 @@ export function validateEnvironment(): EnvironmentConfig {
     );
   }
 
-  // Validate JWT secret
-  const jwtValidation = validateJwtSecret(requiredVars.JWT_SECRET!);
-  if (!jwtValidation.isValid) {
-    throw new Error(`JWT_SECRET validation failed: ${jwtValidation.error}`);
+  // Validate JWT secret length
+  if (requiredVars.JWT_SECRET!.length < 32) {
+    throw new Error(
+      "JWT_SECRET must be at least 32 characters long for security",
+    );
   }
 
-  // Validate email format
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(requiredVars.RESEND_FROM_EMAIL!)) {
-    throw new Error("RESEND_FROM_EMAIL must be a valid email address");
+  // Validate Resend API key format
+  if (!requiredVars.RESEND_API_KEY!.startsWith("re_")) {
+    throw new Error("RESEND_API_KEY must be a valid Resend API key");
   }
 
-  // Validate URL format
-  try {
-    new URL(requiredVars.NEXT_PUBLIC_APP_URL!);
-  } catch {
+  // Validate app URL format
+  if (!requiredVars.NEXT_PUBLIC_APP_URL!.startsWith("http")) {
     throw new Error("NEXT_PUBLIC_APP_URL must be a valid URL");
   }
 
@@ -86,8 +92,6 @@ export function validateEnvironment(): EnvironmentConfig {
   }
 
   return {
-    resendApiKey: requiredVars.RESEND_API_KEY!,
-    resendFromEmail: requiredVars.RESEND_FROM_EMAIL!,
     appUrl: requiredVars.NEXT_PUBLIC_APP_URL!,
     nodeEnv: process.env.NODE_ENV || "development",
     jwtSecret: requiredVars.JWT_SECRET!,
@@ -108,22 +112,4 @@ export function getEnvironmentConfig(): EnvironmentConfig {
     console.error("Environment validation failed:", error);
     throw error;
   }
-}
-
-/**
- * Validates environment variables specifically for email integration.
- * This is a subset of the full validation for backward compatibility.
- * @returns {Partial<EnvironmentConfig>} The validated email environment configuration
- */
-export function validateEmailEnvironment(): Pick<
-  EnvironmentConfig,
-  "resendApiKey" | "resendFromEmail" | "appUrl" | "nodeEnv"
-> {
-  const config = validateEnvironment();
-  return {
-    resendApiKey: config.resendApiKey,
-    resendFromEmail: config.resendFromEmail,
-    appUrl: config.appUrl,
-    nodeEnv: config.nodeEnv,
-  };
 }
