@@ -14,7 +14,6 @@ This phase focuses on setting up the database schema, migrations, dependencies, 
   - Add `EmailVerificationToken` model with fields: id, userId, token, expiresAt, createdAt, user relation
   - Add `PasswordResetToken` model with fields: id, userId, token, expiresAt, createdAt, user relation
   - Add `EmailRateLimit` model for rate limiting
-  - Add `EmailLog` model for logging email operations
   - Update `User` model to include: emailVerified (Boolean), emailVerifiedAt (DateTime), relations to all token models
   - Add proper indexes and table mappings
 
@@ -35,7 +34,6 @@ model User {
   emailVerificationTokens EmailVerificationToken[]
   passwordResetTokens     PasswordResetToken[]
   emailRateLimits         EmailRateLimit[]
-  emailLogs               EmailLog[]
   applications            Application[]
   categories             Category[]
   domains                Domain[]
@@ -86,23 +84,7 @@ model EmailRateLimit {
   @@map("email_rate_limits")
 }
 
-model EmailLog {
-  id        String   @id @default(cuid())
-  type      String   // 'verification', 'password_reset', 'welcome'
-  email     String
-  userId    String?
-  status    String   // 'success', 'error'
-  error     String?
-  metadata  Json?
-  createdAt DateTime @default(now())
 
-  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
-
-  @@index([type, createdAt])
-  @@index([email, createdAt])
-  @@index([status, createdAt])
-  @@map("email_logs")
-}
 ```
 
 ### Task 2: Create Database Migration
@@ -230,14 +212,13 @@ model EmailLog {
 - **EmailVerificationToken**: Stores verification tokens with expiration
 - **PasswordResetToken**: Stores password reset tokens with expiration
 - **EmailRateLimit**: Tracks rate limiting for email operations
-- **EmailLog**: Logs all email operations for monitoring
 
 ### Key Features:
 
 - **Cascade Deletes**: Tokens are automatically deleted when user is deleted
 - **Indexes**: Optimized queries for token lookup and rate limiting
 - **Expiration Tracking**: Automatic cleanup of expired tokens
-- **Audit Trail**: Complete logging of email operations
+
 - **Rate Limiting**: Prevents abuse of email endpoints
 
 ## Next Phase

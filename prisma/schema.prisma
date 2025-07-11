@@ -23,7 +23,6 @@ model User {
   settings                  UserSettings?
   emailVerificationTokens   EmailVerificationToken[]
   passwordResetTokens       PasswordResetToken[]
-  emailLogs                 EmailLog[]
 
   @@map("users")
 }
@@ -179,20 +178,4 @@ model EmailRateLimit {
   @@map("email_rate_limits")
 }
 
-model EmailLog {
-  id        String   @id @default(cuid())
-  type      String   // 'verification', 'password_reset', 'welcome'
-  email     String
-  userId    String?
-  status    String   // 'success', 'error'
-  error     String?
-  metadata  Json?
-  createdAt DateTime @default(now())
-  
-  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
-  
-  @@index([type, createdAt])
-  @@index([email, createdAt])
-  @@index([status, createdAt])
-  @@map("email_logs")
-}
+
