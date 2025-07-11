@@ -110,6 +110,14 @@ export function FormBuilder({
   const isLoading = mutation.isPending;
   const isHorizontal = config.layout === "horizontal";
 
+  // Disable submit if loading or any required field is empty
+  const isAnyRequiredFieldEmpty = config.fields.some(
+    (field) =>
+      field.required &&
+      (!formData[field.name] || formData[field.name].trim() === ""),
+  );
+  const isSubmitDisabled = isLoading || isAnyRequiredFieldEmpty;
+
   return (
     <div className={`rounded-lg p-6 ${config.containerClassName || ""}`}>
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -136,7 +144,7 @@ export function FormBuilder({
         </div>
 
         <div className="flex justify-center gap-2">
-          <Button type="submit" disabled={isLoading}>
+          <Button type="submit" disabled={isSubmitDisabled}>
             {isLoading ? config.loadingText : config.submitText}
           </Button>
           {onCancel && (
