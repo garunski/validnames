@@ -2,6 +2,7 @@
 
 import { FormBuilder } from "@/components/forms/FormBuilder";
 import { createTurnstileValidator } from "@/components/forms/turnstileValidation";
+import { Link } from "@/primitives/link";
 import { UserGroupIcon } from "@heroicons/react/24/outline";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -66,9 +67,11 @@ function LoginPage() {
     <div className="relative w-full max-w-md">
       <div className="relative rounded-2xl border border-white/20 bg-white/80 p-8 shadow-2xl backdrop-blur-sm">
         <div className="mb-8 text-center">
-          <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg">
-            <UserGroupIcon className="h-8 w-8 text-white" />
-          </div>
+          <Link href="/" className="inline-block">
+            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg transition-transform hover:scale-105">
+              <UserGroupIcon className="h-8 w-8 text-white" />
+            </div>
+          </Link>
           <h1 className="mb-2 text-2xl font-bold text-gray-900">
             Sign in to Valid Names
           </h1>
