@@ -58,10 +58,7 @@ export default function ProfilePage() {
           <ProfileStats />
         </div>
         <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-          <ProfileInformation
-            user={user}
-            alwaysEditable
-          />
+          <ProfileInformation user={user} alwaysEditable />
         </div>
       </div>
     </FeatureErrorBoundary>

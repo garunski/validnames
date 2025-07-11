@@ -29,6 +29,10 @@ export async function POST(request: NextRequest) {
       throw new UnauthorizedError("Invalid credentials");
     }
 
+    if (!user.emailVerified) {
+      throw new UnauthorizedError("Please verify your email before logging in");
+    }
+
     const isValid = await bcrypt.compare(password, user.passwordHash);
 
     if (!isValid) {

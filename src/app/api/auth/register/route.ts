@@ -1,4 +1,6 @@
 import { prisma } from "@/app/database/client";
+import { sendEmailVerification } from "@/operations/emailVerificationOperations";
+import { generateEmailVerificationToken } from "@/operations/tokenOperations";
 import { handleError } from "@/validators/apiErrorResponse";
 import { ConflictError } from "@/validators/apiErrorTypes";
 import {
@@ -44,11 +46,15 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // Send verification email
+    const token = await generateEmailVerificationToken(user.id);
+    await sendEmailVerification(user.email, user.name || "User", token);
+
     return createSuccessResponse(
       {
         user: { id: user.id, email: user.email, name: user.name },
       },
-      "User created successfully",
+      "User created successfully. Please check your email to verify your account.",
       201,
     );
   } catch (error) {

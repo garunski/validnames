@@ -10,9 +10,7 @@ interface ProfileInformationProps {
   alwaysEditable?: boolean;
 }
 
-export function ProfileInformation({
-  user,
-}: ProfileInformationProps) {
+export function ProfileInformation({ user }: ProfileInformationProps) {
   const formConfig: FormConfig = {
     fields: [
       {
