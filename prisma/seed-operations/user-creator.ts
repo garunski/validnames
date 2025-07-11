@@ -10,6 +10,8 @@ export async function createTestUser(prisma: PrismaClient) {
       email: "test@example.com",
       passwordHash: hashedPassword,
       name: "Test User",
+      emailVerified: true,
+      emailVerifiedAt: new Date(),
     },
   });
 }

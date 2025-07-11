@@ -31,7 +31,6 @@ model UserSettings {
   id             String   @id @default(cuid())
   userId         String   @unique
   selectedTldIds String?
-  preferences    String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -50,6 +49,7 @@ model Application {
   user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   categories     Category[]
 
+  @@index([userId])
   @@map("applications")
 }
 
@@ -64,6 +64,7 @@ model Category {
   domains       Domain[]
 
   @@unique([applicationId, name])
+  @@index([applicationId])
   @@map("categories")
 }
 
@@ -77,6 +78,7 @@ model Domain {
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@unique([name, categoryId])
+  @@index([categoryId])
   @@map("domains")
 }
 
@@ -93,6 +95,7 @@ model TLD {
   updatedAt   DateTime @updatedAt
   checks      Check[]
 
+  @@index([category])
   @@map("tlds")
 }
 
@@ -113,27 +116,10 @@ model Check {
   tld         TLD       @relation(fields: [tldId], references: [id], onDelete: Cascade)
 
   @@unique([domainId, tldId])
+  @@index([domainId])
+  @@index([tldId])
+  @@index([batchId])
   @@map("checks")
-}
-
-model BackgroundJob {
-  id            String    @id @default(uuid())
-  userId        String
-  applicationId String?
-  categoryId    String?
-  type          String
-  status        String
-  progress      Int
-  message       String?
-  error         String?
-  batchId       String?
-  startedAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  finishedAt    DateTime?
-
-  @@index([userId])
-  @@index([applicationId])
-  @@index([categoryId])
 }
 
 model EmailVerificationToken {

@@ -10,7 +10,6 @@ export type UserSettings = {
   id: string;
   userId: string;
   selectedTldExtensions: string[]; // Parsed from JSON string - contains TLD extensions like [".com", ".org"]
-  preferences: Record<string, unknown>; // Parsed from JSON string for other preferences
   createdAt: Date;
   updatedAt: Date;
 };

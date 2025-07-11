@@ -14,14 +14,6 @@ export async function removeApplication(applicationId: string, userId: string) {
     throw new NotFoundError("Application not found");
   }
 
-  // Delete background jobs associated with this application
-  await prisma.backgroundJob.deleteMany({
-    where: {
-      applicationId: applicationId,
-      userId: userId,
-    },
-  });
-
   // Delete the application (categories, domains, and checks will be deleted automatically via cascade)
   await prisma.application.delete({
     where: {

@@ -49,7 +49,6 @@ export async function saveUserTldSelections(
     create: {
       userId,
       selectedTldIds: JSON.stringify(tldIds),
-      preferences: JSON.stringify({}),
     },
   });
 

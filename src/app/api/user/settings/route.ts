@@ -28,9 +28,6 @@ export async function GET() {
 
     const response = {
       selectedTldIds: selectedTldExtensions, // API still uses this name but contains extensions
-      preferences: settings?.preferences
-        ? JSON.parse(settings.preferences)
-        : {},
     };
 
     return createSuccessResponse(response);
@@ -46,7 +43,7 @@ export async function PUT(request: NextRequest) {
       return createSuccessResponse(null, "Unauthorized", 401);
     }
 
-    const { selectedTldIds, preferences } = await request.json();
+    const { selectedTldIds } = await request.json();
 
     // Convert TLD extensions to IDs for database storage using shared operation
     const { selectedTldIds: tldIdsJson } =
@@ -56,12 +53,10 @@ export async function PUT(request: NextRequest) {
       where: { userId: user.id },
       update: {
         selectedTldIds: tldIdsJson,
-        preferences: preferences ? JSON.stringify(preferences) : null,
       },
       create: {
         userId: user.id,
         selectedTldIds: tldIdsJson,
-        preferences: preferences ? JSON.stringify(preferences) : null,
       },
     });
 
@@ -72,7 +67,6 @@ export async function PUT(request: NextRequest) {
 
     const response = {
       selectedTldIds: selectedTldExtensions, // API still uses this name but contains extensions
-      preferences: settings.preferences ? JSON.parse(settings.preferences) : {},
     };
 
     return createSuccessResponse(response);

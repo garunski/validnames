@@ -17,6 +17,7 @@ interface EnvironmentConfig {
  * @returns {EnvironmentConfig} The validated environment configuration
  */
 export function validateEnvironment(): EnvironmentConfig {
+  const isProduction = process.env.NODE_ENV === "production";
   const requiredVars = {
     DATABASE_URL: process.env.DATABASE_URL,
     JWT_SECRET: process.env.JWT_SECRET,
@@ -27,8 +28,18 @@ export function validateEnvironment(): EnvironmentConfig {
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
   };
 
+  // Only require Turnstile keys in production
   const missingVars = Object.entries(requiredVars)
-    .filter(([, value]) => !value)
+    .filter(([key, value]) => {
+      if (
+        !isProduction &&
+        (key === "TURNSTILE_SECRET_KEY" ||
+          key === "NEXT_PUBLIC_TURNSTILE_SITE_KEY")
+      ) {
+        return false;
+      }
+      return !value;
+    })
     .map(([key]) => key);
 
   if (missingVars.length > 0) {
@@ -63,12 +74,14 @@ export function validateEnvironment(): EnvironmentConfig {
     );
   }
 
-  // Validate Turnstile keys (basic format check)
-  if (requiredVars.TURNSTILE_SECRET_KEY!.length < 10) {
+  // Validate Turnstile keys (basic format check) - only in production
+  if (isProduction && requiredVars.TURNSTILE_SECRET_KEY!.length < 10) {
     throw new Error("TURNSTILE_SECRET_KEY appears to be invalid");
   }
-
-  if (requiredVars.NEXT_PUBLIC_TURNSTILE_SITE_KEY!.length < 10) {
+  if (
+    isProduction &&
+    requiredVars.NEXT_PUBLIC_TURNSTILE_SITE_KEY!.length < 10
+  ) {
     throw new Error("NEXT_PUBLIC_TURNSTILE_SITE_KEY appears to be invalid");
   }
 
@@ -78,8 +91,8 @@ export function validateEnvironment(): EnvironmentConfig {
     appUrl: requiredVars.NEXT_PUBLIC_APP_URL!,
     nodeEnv: process.env.NODE_ENV || "development",
     jwtSecret: requiredVars.JWT_SECRET!,
-    turnstileSecretKey: requiredVars.TURNSTILE_SECRET_KEY!,
-    turnstileSiteKey: requiredVars.NEXT_PUBLIC_TURNSTILE_SITE_KEY!,
+    turnstileSecretKey: requiredVars.TURNSTILE_SECRET_KEY || "",
+    turnstileSiteKey: requiredVars.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "",
     databaseUrl: requiredVars.DATABASE_URL!,
   };
 }

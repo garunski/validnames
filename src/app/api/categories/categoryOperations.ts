@@ -138,14 +138,6 @@ export async function deleteCategoryForUser(
     throw new NotFoundError("Category");
   }
 
-  // Delete background jobs associated with this category to prevent orphan data
-  await prisma.backgroundJob.deleteMany({
-    where: {
-      categoryId: categoryId!,
-      userId,
-    },
-  });
-
   // Delete the category (domains and checks will be deleted automatically via cascade)
   await prisma.category.delete({
     where: {

@@ -14,7 +14,3 @@ export const checkQuerySchema = z.object({
   limit: z.string().optional(),
   offset: z.string().optional(),
 });
-
-export const backgroundJobSchema = z.object({
-  jobId: z.string().min(1, "Job ID is required"),
-});

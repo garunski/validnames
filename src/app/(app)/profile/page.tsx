@@ -1,6 +1,7 @@
 "use client";
 
 import { FeatureErrorBoundary } from "@/components/FeatureErrorBoundary";
+import { DeleteAccountForm } from "@/components/forms/DeleteAccountForm";
 import { fetchWithAuth } from "@/hooks/fetchWithAuth";
 import { useQuery } from "@tanstack/react-query";
 import { ProfileHeader } from "./components/ProfileHeader";
@@ -8,8 +9,6 @@ import { ProfileInformation } from "./components/ProfileInformation";
 import { ProfileStats } from "./components/ProfileStats";
 
 export default function ProfilePage() {
-  // const queryClient = useQueryClient();
-
   // Fetch user data
   const { data: userData, isLoading: userLoading } = useQuery({
     queryKey: ["user"],
@@ -37,16 +36,18 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <div className="text-center">
-          <div className="text-lg font-medium text-zinc-900 dark:text-white">
-            User not found
-          </div>
-          <div className="mt-2 text-zinc-500 dark:text-zinc-400">
-            Please log in to view your profile.
+      <FeatureErrorBoundary>
+        <div className="flex min-h-screen items-center justify-center">
+          <div className="text-center">
+            <h1 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">
+              Not Found
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              User not found or not authenticated.
+            </p>
           </div>
         </div>
-      </div>
+      </FeatureErrorBoundary>
     );
   }
 
@@ -59,6 +60,19 @@ export default function ProfilePage() {
         </div>
         <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
           <ProfileInformation user={user} alwaysEditable />
+        </div>
+        <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="p-6">
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-red-600">
+                Danger Zone
+              </h3>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                These actions are irreversible. Please proceed with caution.
+              </p>
+            </div>
+            <DeleteAccountForm />
+          </div>
         </div>
       </div>
     </FeatureErrorBoundary>
