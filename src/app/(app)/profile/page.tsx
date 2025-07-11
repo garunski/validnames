@@ -55,7 +55,7 @@ export default function ProfilePage() {
       <div className="space-y-8">
         <ProfileHeader user={user} />
         <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-          <ProfileStats hideActivityAndTips />
+          <ProfileStats />
         </div>
         <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
           <ProfileInformation

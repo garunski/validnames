@@ -11,7 +11,7 @@ export interface UploadResult {
 export interface FileUploadStatus {
   id: string;
   file: File;
-  status: 'pending' | 'uploading' | 'success' | 'error';
+  status: "pending" | "uploading" | "success" | "error";
   result?: UploadResult;
   error?: string;
-} 
+}

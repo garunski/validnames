@@ -2,9 +2,9 @@
 
 import { FeatureErrorBoundary } from "@/components/FeatureErrorBoundary";
 import { useMutation } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
-import { UploadArea } from "./UploadArea";
+import { useEffect, useState } from "react";
 import type { FileUploadStatus, UploadResult } from "../uploadTypes";
+import { UploadArea } from "./UploadArea";
 
 interface UploadZoneProps {
   id: string;

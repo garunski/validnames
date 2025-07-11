@@ -8,7 +8,10 @@ interface FileUploadStatusListProps {
   onClearCompleted: () => void;
 }
 
-export function FileUploadStatusList({ fileUploads, onClearCompleted }: FileUploadStatusListProps) {
+export function FileUploadStatusList({
+  fileUploads,
+  onClearCompleted,
+}: FileUploadStatusListProps) {
   if (fileUploads.length === 0) {
     return null;
   }

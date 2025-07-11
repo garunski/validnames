@@ -4,11 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchProfileStats, type ProfileStatsData } from "./ProfileStatsData";
 import { ProfileStatsDisplay } from "./ProfileStatsDisplay";
 
-interface ProfileStatsProps {
-  hideActivityAndTips?: boolean;
-}
-
-export function ProfileStats({ hideActivityAndTips }: ProfileStatsProps) {
+export function ProfileStats() {
   const {
     data: stats,
     isLoading,
@@ -21,15 +17,15 @@ export function ProfileStats({ hideActivityAndTips }: ProfileStatsProps) {
 
   if (isLoading) {
     return (
-      <div className="space-y-4">
+      <div className="space-y-4 p-6">
         <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
           Statistics
         </h2>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {[...Array(6)].map((_, i) => (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          {[...Array(3)].map((_, i) => (
             <div
               key={i}
-              className="animate-pulse rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800"
+              className="animate-pulse rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-800"
             >
               <div className="mb-2 h-4 rounded bg-zinc-200 dark:bg-zinc-700"></div>
               <div className="h-8 rounded bg-zinc-200 dark:bg-zinc-700"></div>
@@ -42,7 +38,7 @@ export function ProfileStats({ hideActivityAndTips }: ProfileStatsProps) {
 
   if (error) {
     return (
-      <div className="space-y-4">
+      <div className="space-y-4 p-6">
         <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
           Statistics
         </h2>
@@ -60,14 +56,11 @@ export function ProfileStats({ hideActivityAndTips }: ProfileStatsProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-6">
       <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
         Statistics
       </h2>
-      <ProfileStatsDisplay
-        stats={stats}
-        hideActivityAndTips={hideActivityAndTips}
-      />
+      <ProfileStatsDisplay stats={stats} />
     </div>
   );
 }

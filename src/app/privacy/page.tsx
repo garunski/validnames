@@ -25,7 +25,7 @@ export default function PrivacyPage() {
               </Link>
               <Link
                 href="/register"
-                className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
               >
                 Get Started
               </Link>
@@ -36,52 +36,61 @@ export default function PrivacyPage() {
 
       {/* Main Content */}
       <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="prose prose-zinc max-w-none dark:prose-invert">
-          <h1 className="text-3xl font-bold text-zinc-900 dark:text-white mb-8">
+        <div className="prose prose-zinc dark:prose-invert max-w-none">
+          <h1 className="mb-8 text-3xl font-bold text-zinc-900 dark:text-white">
             Privacy Policy
           </h1>
-          
-          <div className="text-sm text-zinc-600 dark:text-zinc-400 mb-8">
-            <p><strong>Effective Date:</strong> July 11, 2025</p>
-            <p><strong>Last Updated:</strong> July 11, 2025</p>
+
+          <div className="mb-8 text-sm text-zinc-600 dark:text-zinc-400">
+            <p>
+              <strong>Effective Date:</strong> July 11, 2025
+            </p>
+            <p>
+              <strong>Last Updated:</strong> July 11, 2025
+            </p>
           </div>
 
           <section className="mb-8">
-            <h2 className="text-xl font-semibold text-zinc-900 dark:text-white mb-4">
+            <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-white">
               1. Information We Collect
             </h2>
-            
-            <h3 className="text-lg font-medium text-zinc-900 dark:text-white mb-2">
+
+            <h3 className="mb-2 text-lg font-medium text-zinc-900 dark:text-white">
               Personal Information:
             </h3>
-            <ul className="list-disc pl-6 mb-4 text-zinc-700 dark:text-zinc-300">
-              <li>Name and email address (collected during account registration)</li>
+            <ul className="mb-4 list-disc pl-6 text-zinc-700 dark:text-zinc-300">
+              <li>
+                Name and email address (collected during account registration)
+              </li>
               <li>Email is used as your username for account access</li>
             </ul>
 
-            <h3 className="text-lg font-medium text-zinc-900 dark:text-white mb-2">
+            <h3 className="mb-2 text-lg font-medium text-zinc-900 dark:text-white">
               Technical Information:
             </h3>
-            <ul className="list-disc pl-6 mb-4 text-zinc-700 dark:text-zinc-300">
+            <ul className="mb-4 list-disc pl-6 text-zinc-700 dark:text-zinc-300">
               <li>Website usage data through Vercel Analytics</li>
               <li>Performance metrics through Vercel Speed Insights</li>
-              <li>Standard web server logs (IP addresses, browser information, access times)</li>
+              <li>
+                Standard web server logs (IP addresses, browser information,
+                access times)
+              </li>
             </ul>
 
-            <h3 className="text-lg font-medium text-zinc-900 dark:text-white mb-2">
+            <h3 className="mb-2 text-lg font-medium text-zinc-900 dark:text-white">
               Domain-Related Information:
             </h3>
-            <ul className="list-disc pl-6 mb-4 text-zinc-700 dark:text-zinc-300">
+            <ul className="mb-4 list-disc pl-6 text-zinc-700 dark:text-zinc-300">
               <li>Domain names you search or check</li>
               <li>WHOIS data retrieved from public domain registries</li>
             </ul>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-xl font-semibold text-zinc-900 dark:text-white mb-4">
+            <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-white">
               2. How We Use Your Information
             </h2>
-            <p className="text-zinc-700 dark:text-zinc-300 mb-4">
+            <p className="mb-4 text-zinc-700 dark:text-zinc-300">
               We use the information we collect to:
             </p>
             <ul className="list-disc pl-6 text-zinc-700 dark:text-zinc-300">
@@ -94,45 +103,63 @@ export default function PrivacyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-xl font-semibold text-zinc-900 dark:text-white mb-4">
+            <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-white">
               3. Information Sharing and Disclosure
             </h2>
-            <p className="text-zinc-700 dark:text-zinc-300 mb-4">
-              <strong>We do not sell, trade, or disclose your personal information to third parties.</strong> Your information remains private and is only used for the purposes outlined in this policy.
+            <p className="mb-4 text-zinc-700 dark:text-zinc-300">
+              <strong>
+                We do not sell, trade, or disclose your personal information to
+                third parties.
+              </strong>{" "}
+              Your information remains private and is only used for the purposes
+              outlined in this policy.
             </p>
-            
-            <h3 className="text-lg font-medium text-zinc-900 dark:text-white mb-2">
+
+            <h3 className="mb-2 text-lg font-medium text-zinc-900 dark:text-white">
               Third-Party Services:
             </h3>
             <ul className="list-disc pl-6 text-zinc-700 dark:text-zinc-300">
-              <li><strong>Vercel Analytics & Speed Insights:</strong> Used for performance monitoring and analytics</li>
-              <li><strong>WHOIS Services:</strong> Domain availability is checked against public WHOIS databases</li>
+              <li>
+                <strong>Vercel Analytics & Speed Insights:</strong> Used for
+                performance monitoring and analytics
+              </li>
+              <li>
+                <strong>WHOIS Services:</strong> Domain availability is checked
+                against public WHOIS databases
+              </li>
             </ul>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-xl font-semibold text-zinc-900 dark:text-white mb-4">
+            <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-white">
               4. Data Security
             </h2>
             <p className="text-zinc-700 dark:text-zinc-300">
-              We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the internet is 100% secure.
+              We implement appropriate security measures to protect your
+              personal information against unauthorized access, alteration,
+              disclosure, or destruction. However, no method of transmission
+              over the internet is 100% secure.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-xl font-semibold text-zinc-900 dark:text-white mb-4">
+            <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-white">
               5. Data Retention
             </h2>
             <p className="text-zinc-700 dark:text-zinc-300">
-              We retain your personal information only as long as necessary to provide our services or as required by law. You may request deletion of your account and associated data by contacting us.
+              We retain your personal information only as long as necessary to
+              provide our services or as required by law. You may request
+              deletion of your account and associated data by contacting us.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-xl font-semibold text-zinc-900 dark:text-white mb-4">
+            <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-white">
               6. Your Rights
             </h2>
-            <p className="text-zinc-700 dark:text-zinc-300 mb-4">You have the right to:</p>
+            <p className="mb-4 text-zinc-700 dark:text-zinc-300">
+              You have the right to:
+            </p>
             <ul className="list-disc pl-6 text-zinc-700 dark:text-zinc-300">
               <li>Access your personal information</li>
               <li>Correct inaccurate information</li>
@@ -142,33 +169,41 @@ export default function PrivacyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-xl font-semibold text-zinc-900 dark:text-white mb-4">
+            <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-white">
               7. Cookies and Tracking
             </h2>
             <p className="text-zinc-700 dark:text-zinc-300">
-              We use essential cookies for website functionality and may use analytics cookies to improve our services. You can control cookie preferences through your browser settings.
+              We use essential cookies for website functionality and may use
+              analytics cookies to improve our services. You can control cookie
+              preferences through your browser settings.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-xl font-semibold text-zinc-900 dark:text-white mb-4">
+            <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-white">
               8. Changes to This Policy
             </h2>
             <p className="text-zinc-700 dark:text-zinc-300">
-              We may update this Privacy Policy from time to time. We will notify users of any material changes by posting the new policy on this page with an updated &ldquo;Last Updated&rdquo; date.
+              We may update this Privacy Policy from time to time. We will
+              notify users of any material changes by posting the new policy on
+              this page with an updated &ldquo;Last Updated&rdquo; date.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-xl font-semibold text-zinc-900 dark:text-white mb-4">
+            <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-white">
               9. Contact Information
             </h2>
             <p className="text-zinc-700 dark:text-zinc-300">
               For questions about this Privacy Policy, please contact:
             </p>
             <ul className="list-none pl-0 text-zinc-700 dark:text-zinc-300">
-              <li><strong>Owner:</strong> Garun Vagidov</li>
-              <li><strong>Email:</strong> info@garunski.com</li>
+              <li>
+                <strong>Owner:</strong> Garun Vagidov
+              </li>
+              <li>
+                <strong>Email:</strong> info@garunski.com
+              </li>
             </ul>
           </section>
         </div>
@@ -185,11 +220,25 @@ export default function PrivacyPage() {
               </span>
             </div>
             <p className="text-sm text-zinc-600 dark:text-zinc-400">
-              © {new Date().getFullYear()} <a href="https://garunski.com">Garunski</a> · <Link href="/privacy" className="hover:text-zinc-900 dark:hover:text-white">Privacy</Link> · <Link href="/terms" className="hover:text-zinc-900 dark:hover:text-white">Terms</Link>
+              © {new Date().getFullYear()}{" "}
+              <a href="https://garunski.com">Garunski</a> ·{" "}
+              <Link
+                href="/privacy"
+                className="hover:text-zinc-900 dark:hover:text-white"
+              >
+                Privacy
+              </Link>{" "}
+              ·{" "}
+              <Link
+                href="/terms"
+                className="hover:text-zinc-900 dark:hover:text-white"
+              >
+                Terms
+              </Link>
             </p>
           </div>
         </div>
       </footer>
     </div>
   );
-} 
+}

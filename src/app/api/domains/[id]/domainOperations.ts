@@ -1,7 +1,7 @@
 import { prisma } from "@/app/database/client";
 import { NotFoundError } from "@/validators/apiErrorTypes";
 import { createSuccessResponse } from "@/validators/apiResponseFormatter";
-import type { Domain, Check } from "@prisma/client";
+import type { Check, Domain } from "@prisma/client";
 
 // The domain param is a Domain object with category and checks included
 interface DomainWithCategoryAndChecks extends Domain {

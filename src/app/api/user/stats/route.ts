@@ -13,65 +13,34 @@ export async function GET() {
     }
 
     // Get user statistics
-    const [
-      applicationsCount,
-      categoriesCount,
-      domainsCount,
-      checksCount,
-      lastCheck,
-    ] = await Promise.all([
-      // Count applications
-      prisma.application.count({
-        where: { userId: user.id },
-      }),
+    const [applicationsCount, categoriesCount, domainsCount] =
+      await Promise.all([
+        // Count applications
+        prisma.application.count({
+          where: { userId: user.id },
+        }),
 
-      // Count categories
-      prisma.category.count({
-        where: {
-          application: { userId: user.id },
-        },
-      }),
-
-      // Count domains
-      prisma.domain.count({
-        where: {
-          category: {
+        // Count categories
+        prisma.category.count({
+          where: {
             application: { userId: user.id },
           },
-        },
-      }),
+        }),
 
-      // Count checks
-      prisma.check.count({
-        where: {
-          domain: {
+        // Count domains
+        prisma.domain.count({
+          where: {
             category: {
               application: { userId: user.id },
             },
           },
-        },
-      }),
-
-      // Get most recent check
-      prisma.check.findFirst({
-        where: {
-          domain: {
-            category: {
-              application: { userId: user.id },
-            },
-          },
-        },
-        orderBy: { createdAt: "desc" },
-        select: { createdAt: true },
-      }),
-    ]);
+        }),
+      ]);
 
     const stats = {
-      applications: applicationsCount,
-      categories: categoriesCount,
-      domains: domainsCount,
-      checks: checksCount,
-      lastActive: lastCheck?.createdAt || user.createdAt,
+      totalApplications: applicationsCount,
+      totalCategories: categoriesCount,
+      totalDomains: domainsCount,
     };
 
     return createSuccessResponse(stats);

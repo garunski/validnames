@@ -49,7 +49,21 @@ export default function LandingPage() {
               </span>
             </div>
             <p className="text-sm text-zinc-600 dark:text-zinc-400">
-              © {new Date().getFullYear()} <a href="https://garunski.com">Garunski</a> · <Link href="/privacy" className="hover:text-zinc-900 dark:hover:text-white">Privacy</Link> · <Link href="/terms" className="hover:text-zinc-900 dark:hover:text-white">Terms</Link>
+              © {new Date().getFullYear()}{" "}
+              <a href="https://garunski.com">Garunski</a> ·{" "}
+              <Link
+                href="/privacy"
+                className="hover:text-zinc-900 dark:hover:text-white"
+              >
+                Privacy
+              </Link>{" "}
+              ·{" "}
+              <Link
+                href="/terms"
+                className="hover:text-zinc-900 dark:hover:text-white"
+              >
+                Terms
+              </Link>
             </p>
           </div>
         </div>
