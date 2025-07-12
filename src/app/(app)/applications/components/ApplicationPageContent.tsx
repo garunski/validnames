@@ -2,6 +2,7 @@
 
 import { useApplicationData } from "@/applications/hooks/useApplicationData";
 import { FeatureErrorBoundary } from "@/components/FeatureErrorBoundary";
+import { Toast } from "@/components/Toast";
 import { TLDSelector } from "@/components/tldSelector";
 import { notFound } from "next/navigation";
 import { useApplicationOverviewStats } from "../hooks/useApplicationOverviewStats";
@@ -29,6 +30,9 @@ export function ApplicationPageContent({ id }: ApplicationPageContentProps) {
     updateSelectedTlds,
     handleCheckDomains,
     handleRefreshDomain,
+    autoCheckToasts,
+    handleAutoCheckToastHide,
+    isAutoChecking,
   } = useApplicationData(id);
 
   const {
@@ -106,6 +110,7 @@ export function ApplicationPageContent({ id }: ApplicationPageContentProps) {
           statusFilter={statusFilter}
           overviewStats={overviewStats}
           applicationId={id}
+          isAutoChecking={isAutoChecking}
           onCategorySelect={handleCategorySelect}
           onShowOverview={handleShowOverview}
           onToggleNewCategoryForm={handleToggleNewCategoryForm}
@@ -127,6 +132,22 @@ export function ApplicationPageContent({ id }: ApplicationPageContentProps) {
           selectedTldExtensions={selectedTlds}
           onSelectionChange={updateSelectedTlds}
         />
+
+        {/* Auto Domain Checking Toast Notifications */}
+        <div className="fixed right-4 bottom-4 z-50 flex flex-col items-end gap-2">
+          {autoCheckToasts.map((toast) => (
+            <Toast
+              key={toast.id}
+              message={toast.message}
+              type={toast.type}
+              position="bottom-right"
+              duration={toast.type === "info" ? 3000 : 4000}
+              isVisible={toast.isVisible}
+              onHide={() => handleAutoCheckToastHide(toast.id)}
+              showCloseButton={true}
+            />
+          ))}
+        </div>
       </div>
     </FeatureErrorBoundary>
   );

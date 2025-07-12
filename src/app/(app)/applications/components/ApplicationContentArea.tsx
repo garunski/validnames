@@ -30,6 +30,7 @@ interface ApplicationContentAreaProps {
     lastCheckTime: Date | null;
   };
   applicationId: string;
+  isAutoChecking?: boolean;
   onCategorySelect: (categoryId: string) => void;
   onShowOverview: () => void;
   onToggleNewCategoryForm: () => void;
@@ -61,6 +62,7 @@ export function ApplicationContentArea({
   statusFilter,
   overviewStats,
   applicationId,
+  isAutoChecking = false,
   onCategorySelect,
   onShowOverview,
   onToggleNewCategoryForm,
@@ -86,6 +88,7 @@ export function ApplicationContentArea({
         selectedCategory={selectedCategory}
         showNewCategoryForm={showNewCategoryForm}
         showOverview={showOverview}
+        isAutoChecking={isAutoChecking}
         onCategorySelect={onCategorySelect}
         onShowOverview={onShowOverview}
         onToggleNewCategoryForm={onToggleNewCategoryForm}

@@ -4,7 +4,7 @@ import type { CategoryWithRelations } from "@/app/api/applications/applicationTy
 import { Badge } from "@/primitives/badge";
 import { Button } from "@/primitives/button";
 import { Subheading } from "@/primitives/heading";
-import { PlusIcon } from "@heroicons/react/20/solid";
+import { ArrowPathIcon, PlusIcon } from "@heroicons/react/20/solid";
 
 import { AddCategoryForm } from "./AddCategoryForm";
 
@@ -13,6 +13,7 @@ interface CategoryNavigationProps {
   selectedCategory: string | null;
   showNewCategoryForm: boolean;
   showOverview: boolean;
+  isAutoChecking?: boolean;
   onCategorySelect: (categoryId: string) => void;
   onShowOverview: () => void;
   onToggleNewCategoryForm: () => void;
@@ -25,6 +26,7 @@ export function CategoryNavigation({
   selectedCategory,
   showNewCategoryForm,
   showOverview,
+  isAutoChecking = false,
   onCategorySelect,
   onShowOverview,
   onToggleNewCategoryForm,
@@ -45,7 +47,15 @@ export function CategoryNavigation({
       {/* Category Tabs */}
       <div className="px-0">
         <div className="flex flex-col gap-3 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
-          <Subheading>Categories</Subheading>
+          <div className="flex items-center gap-3">
+            <Subheading>Categories</Subheading>
+            {isAutoChecking && (
+              <div className="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400">
+                <ArrowPathIcon className="h-4 w-4 animate-spin" />
+                <span>Auto-checking domains...</span>
+              </div>
+            )}
+          </div>
           <Button
             onClick={onToggleNewCategoryForm}
             outline

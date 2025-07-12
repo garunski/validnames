@@ -8,6 +8,8 @@ import { fetchWithAuth } from "@/hooks/fetchWithAuth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useApplicationFetching } from "./useApplicationFetching";
+import { useAutoDomainChecking } from "./useAutoDomainChecking";
+import { useAutoDomainCheckingNotifications } from "./useAutoDomainCheckingNotifications";
 
 export function useApplicationData(id: string): {
   application: ApplicationWithCategoriesAndTlds | null;
@@ -24,6 +26,14 @@ export function useApplicationData(id: string): {
   handleCheckDomains: () => void;
   handleRefreshChecks: () => void;
   handleRefreshDomain: (domainId: string) => void;
+  autoCheckToasts: Array<{
+    id: string;
+    message: string;
+    type: "info" | "success" | "error";
+    isVisible: boolean;
+  }>;
+  handleAutoCheckToastHide: (id: string) => void;
+  isAutoChecking: boolean;
 } {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedTlds, setSelectedTlds] = useState<string[]>([]);
@@ -43,6 +53,23 @@ export function useApplicationData(id: string): {
     useDomainChecking(domains, selectedTlds, selectedCategory, () =>
       refetchDomains(),
     );
+
+  const {
+    toasts: autoCheckToasts,
+    showAutoCheckStart,
+    showAutoCheckComplete,
+    handleToastHide: handleAutoCheckToastHide,
+  } = useAutoDomainCheckingNotifications();
+
+  // Auto domain checking when switching to categories with unknown domains
+  const { isAutoChecking } = useAutoDomainChecking({
+    categories,
+    selectedCategory,
+    selectedTlds,
+    onRefreshChecks: handleRefreshChecks,
+    onAutoCheckStart: showAutoCheckStart,
+    onAutoCheckComplete: showAutoCheckComplete,
+  });
 
   // React Query mutation for updating application TLD settings
   const updateTldsMutation = useMutation({
@@ -110,5 +137,8 @@ export function useApplicationData(id: string): {
     handleCheckDomains,
     handleRefreshChecks,
     handleRefreshDomain,
+    autoCheckToasts,
+    handleAutoCheckToastHide,
+    isAutoChecking,
   };
 }
