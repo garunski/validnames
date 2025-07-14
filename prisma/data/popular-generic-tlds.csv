@@ -1,0 +1,6 @@
+extension,name,category,description,popularity,hidden
+.com,Commercial,Popular Generic,Most popular for commercial organizations,high,false
+.org,Organization,Popular Generic,Non-profit organizations,high,false
+.net,Network,Popular Generic,Network infrastructure,high,false
+.info,Information,Popular Generic,Information resources,high,false
+.biz,Business,Popular Generic,Business organizations,high,false 

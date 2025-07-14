@@ -1,0 +1,105 @@
+# Valid Names Application Guidelines
+
+## Development Server Management
+- ALWAYS stop any existing dev server (npm run dev) before running build commands (npm run build)
+- ALWAYS stop any existing dev server before starting a new dev server
+- Use process management commands to kill existing Node.js processes if needed
+- Never run multiple dev servers simultaneously on the same port
+- Check for running processes on port 3000 before starting new servers
+
+## General Rules
+- No file should exceed 150 lines of code
+- Use existing components from src/primitives/ - DO NOT modify them (these are third-party UI components)
+- Follow the existing project structure and patterns
+- Use TypeScript for all code
+- Use Tailwind CSS for styling
+- Follow the existing code style and formatting
+
+## CRITICAL: Anti-Generic Naming Rule
+- NEVER use generic names like "util", "utils", "helper", "helpers", "manager", "managers", "service", "services", "common", "shared", "misc", "lib", "libs"
+- ALL files and directories MUST be named by their specific purpose and functionality
+- Use descriptive names that immediately convey what the code does
+- Examples: "registrarLinkGenerator.ts" NOT "linkUtils.ts", "availabilityStatusFormatter.ts" NOT "statusHelper.ts"
+- Directory names must be purpose-specific: "operations/", "formatters/", "validators/", "generators/", "parsers/" etc.
+- This rule applies to ALL code: components, hooks, functions, classes, directories, and variables
+
+## Authentication
+- JWT-based auth with httpOnly cookies
+- Test user: test@example.com / password123
+- All data is user-scoped and filtered by userId
+
+## Database & Architecture
+- Use Postgres database with Prisma as ORM
+- Create clean, normalized database schema
+- Use proper TypeScript types for all database entities
+- Implement proper error handling
+
+## Domain Model
+- Application: Represents each application that domains will be checked for
+- Category: Contains groups of domains to be checked
+- Domain: Individual domains within categories
+- TLD: Top-level domains associated with checks
+- Check: Domain availability check results with batch support
+
+## Code Organization
+- Keep API routes under 150 lines
+- Keep React components under 150 lines
+- Use proper separation of concerns
+- Create reusable functions with descriptive names (NO generic "utility" functions)
+- Follow Next.js 15 app router patterns
+- Upload functionality separated to dedicated page (/upload)
+- Organize code by feature areas with descriptive directory names
+- Use purpose-specific subdirectories: operations/, formatters/, validators/, generators/, parsers/
+
+## Error Handling & Validation
+- Use comprehensive Zod validation schemas for all API inputs
+- Implement standardized error handling with custom error classes
+- Use FeatureErrorBoundary for React component error isolation
+- All API routes use consistent validation and error response patterns
+- Validation errors return structured field-level error information
+
+## State Management
+- Use React Query for server state management
+- Implement proper loading states and error boundaries
+- Use custom hooks for feature-specific state logic
+- Follow React Query patterns for data fetching and caching
+
+## UI/UX Guidelines
+- Use existing component library from src/primitives/ (third-party components)
+- Maintain consistent styling with current app
+- Implement responsive design
+- Use proper loading states
+- Show clear success/error messages
+- Follow accessibility best practices
+- Use FeatureErrorBoundary for error isolation
+
+## Database Schema Guidelines
+- Use proper foreign key relationships with cascading deletes
+- Add appropriate indexes and unique constraints
+- Use meaningful field names with proper types
+- Include timestamps for audit trails
+- All models linked to User for data isolation
+- Seeded with 25 TLDs and sample applications
+
+## API Guidelines
+- Use Next.js API routes
+- Implement proper error handling with standardized error responses
+- Use appropriate HTTP status codes
+- Add comprehensive request validation using Zod schemas
+- Implement rate limiting considerations
+- All API responses follow consistent format with timestamps
+
+## Performance Guidelines
+- Implement efficient database queries
+- Use proper caching strategies with React Query
+- Minimize API calls through batch operations
+- Implement proper pagination for large datasets
+- Use error boundaries to prevent cascading failures
+
+## Security Guidelines
+- Validate all user inputs using Zod schemas
+- Implement proper error handling without exposing sensitive data
+- Use environment variables for sensitive configuration
+- Follow Next.js security best practices
+- All data is user-scoped and filtered by userId
+

@@ -1,0 +1,31 @@
+extension,name,category,description,popularity,hidden
+.health,Health,Industry Specific,Healthcare services,medium,false
+.medical,Medical,Industry Specific,Medical services,medium,false
+.doctor,Doctor,Industry Specific,Medical doctors,medium,false
+.dental,Dental,Industry Specific,Dental services,medium,false
+.law,Law,Industry Specific,Legal services,medium,false
+.lawyer,Lawyer,Industry Specific,Legal professionals,medium,false
+.attorney,Attorney,Industry Specific,Attorneys,medium,false
+.finance,Finance,Industry Specific,Financial services,medium,false
+.bank,Bank,Industry Specific,Banking services,medium,false
+.insurance,Insurance,Industry Specific,Insurance services,medium,false
+.realestate,Real Estate,Industry Specific,Real estate,medium,false
+.construction,Construction,Industry Specific,Construction industry,medium,false
+.restaurant,Restaurant,Industry Specific,Restaurants,medium,false
+.cafe,Cafe,Industry Specific,Cafes and coffee shops,medium,false
+.bar,Bar,Industry Specific,Bars and pubs,medium,false
+.hotel,Hotel,Industry Specific,Hotels,medium,false
+.travel,Travel,Industry Specific,Travel services,medium,false
+.fitness,Fitness,Industry Specific,Fitness and health,medium,false
+.beauty,Beauty,Industry Specific,Beauty services,medium,false
+.fashion,Fashion,Industry Specific,Fashion industry,medium,false
+.jewelry,Jewelry,Industry Specific,Jewelry stores,medium,false
+.auto,Auto,Industry Specific,Automotive industry,medium,false
+.cars,Cars,Industry Specific,Car dealers,medium,false
+.music,Music,Industry Specific,Music industry,medium,false
+.art,Art,Industry Specific,Art and artists,medium,false
+.photo,Photo,Industry Specific,Photography,medium,false
+.video,Video,Industry Specific,Video production,medium,false
+.film,Film,Industry Specific,Film industry,medium,false
+.games,Games,Industry Specific,Gaming industry,medium,false
+.sports,Sports,Industry Specific,Sports industry,medium,false 

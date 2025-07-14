@@ -1,0 +1,40 @@
+extension,name,category,description,popularity,hidden
+.app,App,Modern Generic,Mobile and web applications,high,false
+.dev,Developer,Modern Generic,Developers and development,high,false
+.io,Input/Output,Modern Generic,Technology and startups,high,false
+.ai,Artificial Intelligence,Modern Generic,AI and technology,high,false
+.tech,Technology,Modern Generic,Technology companies,high,false
+.online,Online,Modern Generic,Online presence,medium,false
+.site,Site,Modern Generic,Websites and sites,medium,false
+.website,Website,Modern Generic,Websites,medium,false
+.blog,Blog,Modern Generic,Blogs and blogging,high,false
+.news,News,Modern Generic,News and media,medium,false
+.store,Store,Modern Generic,E-commerce and retail,medium,false
+.shop,Shop,Modern Generic,Shopping and retail,medium,false
+.cloud,Cloud,Modern Generic,Cloud services,medium,false
+.digital,Digital,Modern Generic,Digital services,medium,false
+.design,Design,Modern Generic,Design and creative,medium,false
+.studio,Studio,Modern Generic,Creative studios,medium,false
+.agency,Agency,Modern Generic,Agencies and services,medium,false
+.company,Company,Modern Generic,Companies,medium,false
+.business,Business,Modern Generic,Business organizations,medium,false
+.services,Services,Modern Generic,Service providers,medium,false
+.solutions,Solutions,Modern Generic,Solution providers,medium,false
+.consulting,Consulting,Modern Generic,Consulting services,medium,false
+.marketing,Marketing,Modern Generic,Marketing services,medium,false
+.media,Media,Modern Generic,Media companies,medium,false
+.network,Network,Modern Generic,Networks and connectivity,medium,false
+.software,Software,Modern Generic,Software companies,medium,false
+.systems,Systems,Modern Generic,System providers,medium,false
+.tools,Tools,Modern Generic,Tools and utilities,medium,false
+.email,Email,Modern Generic,Email services,medium,false
+.domains,Domains,Modern Generic,Domain services,low,false
+.hosting,Hosting,Modern Generic,Web hosting,low,false
+.codes,Codes,Modern Generic,Programming and codes,medium,false
+.data,Data,Modern Generic,Data services,medium,false
+.academy,Academy,Modern Generic,Educational academies,medium,false
+.education,Education,Modern Generic,Educational services,medium,false
+.university,University,Modern Generic,Universities,medium,false
+.school,School,Modern Generic,Schools,medium,false
+.courses,Courses,Modern Generic,Online courses,medium,false
+.training,Training,Modern Generic,Training services,medium,false 

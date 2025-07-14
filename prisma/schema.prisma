@@ -1,0 +1,167 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String        @id @default(cuid())
+  email             String        @unique
+  name              String?
+  passwordHash      String?
+  emailVerified     Boolean       @default(false)
+  emailVerifiedAt   DateTime?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Relations
+  applications              Application[]
+  settings                  UserSettings?
+  emailVerificationTokens   EmailVerificationToken[]
+  passwordResetTokens       PasswordResetToken[]
+
+  @@map("users")
+}
+
+model UserSettings {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  selectedTldIds String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_settings")
+}
+
+model Application {
+  id             String     @id @default(cuid())
+  name           String
+  description    String?
+  selectedTldIds String?
+  userId         String
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categories     Category[]
+
+  @@index([userId])
+  @@map("applications")
+}
+
+model Category {
+  id            String      @id @default(cuid())
+  name          String
+  description   String?
+  applicationId String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  domains       Domain[]
+
+  @@unique([applicationId, name])
+  @@index([applicationId])
+  @@map("categories")
+}
+
+model Domain {
+  id         String   @id @default(cuid())
+  name       String
+  categoryId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  checks     Check[]
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([name, categoryId])
+  @@index([categoryId])
+  @@map("domains")
+}
+
+model TLD {
+  id          String   @id @default(cuid())
+  extension   String   @unique
+  name        String
+  category    String
+  description String
+  popularity  String?
+  hidden      Boolean  @default(false)
+  sortOrder   Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  checks      Check[]
+
+  @@index([category])
+  @@map("tlds")
+}
+
+model Check {
+  id          String    @id @default(cuid())
+  domainId    String
+  tldId       String
+  isAvailable Boolean?
+  checkedAt   DateTime?
+  batchId     String?
+  error       String?
+  domainAge   Int?
+  trustScore  Int?
+  registrar   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  domain      Domain    @relation(fields: [domainId], references: [id], onDelete: Cascade)
+  tld         TLD       @relation(fields: [tldId], references: [id], onDelete: Cascade)
+
+  @@unique([domainId, tldId])
+  @@index([domainId])
+  @@index([tldId])
+  @@index([batchId])
+  @@map("checks")
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([token])
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("email_verification_tokens")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([token])
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("password_reset_tokens")
+}
+
+model EmailRateLimit {
+  id        String   @id @default(cuid())
+  email     String
+  type      String   // 'verification' or 'passwordReset'
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@index([email, type, createdAt])
+  @@index([ipAddress, type, createdAt])
+  @@map("email_rate_limits")
+}
+
+

@@ -1,0 +1,12 @@
+extension,name,category,description,popularity,hidden
+.edu,Education,Sponsored,Educational institutions (US),high,true
+.gov,Government,Sponsored,US Government entities,high,true
+.mil,Military,Sponsored,US Military organizations,medium,true
+.aero,Aeronautical,Sponsored,Aviation industry,low,true
+.coop,Cooperative,Sponsored,Cooperative organizations,low,true
+.museum,Museum,Sponsored,Museums,low,true
+.jobs,Jobs,Sponsored,Job posting sites,low,true
+.mobi,Mobile,Sponsored,Mobile websites,low,true
+.tel,Telephone,Sponsored,Contact information,low,true
+.cat,Catalan,Sponsored,Catalan language/culture,low,true
+.asia,Asia,Sponsored,Asia-Pacific region,low,true 
