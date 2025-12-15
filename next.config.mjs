@@ -39,7 +39,7 @@ const nextConfig = {
       "style-src 'self' 'unsafe-inline' https://rsms.me",
       "img-src 'self' data: https: blob:",
       "font-src 'self' data: https://rsms.me",
-      "connect-src 'self' https://api.resend.com https://vercel.live",
+      "connect-src 'self' https://api.resend.com https://challenges.cloudflare.com https://vercel.live",
       "frame-src https://challenges.cloudflare.com",
       "object-src 'none'",
       "base-uri 'self'",
