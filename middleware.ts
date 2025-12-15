@@ -35,5 +35,6 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
+  runtime: "nodejs", // Use Node.js runtime to access request body
   matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };

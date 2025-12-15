@@ -57,8 +57,10 @@ async function extractCsrfToken(request: NextRequest): Promise<string | null> {
   }
 
   // Try to get token from form data
+  // Note: We clone the request to avoid consuming the body stream
   try {
-    const formData = await request.formData();
+    const clonedRequest = request.clone();
+    const formData = await clonedRequest.formData();
     const formToken = formData.get("csrfToken");
     if (formToken && typeof formToken === "string") {
       return formToken;
@@ -68,10 +70,13 @@ async function extractCsrfToken(request: NextRequest): Promise<string | null> {
   }
 
   // Try to get token from JSON body
+  // Note: We clone the request to avoid consuming the body stream
+  // The cloned request body can still be read by the route handler
   try {
     const contentType = request.headers.get("content-type");
     if (contentType?.includes("application/json")) {
-      const body = await request.json();
+      const clonedRequest = request.clone();
+      const body = await clonedRequest.json();
       if (body.csrfToken && typeof body.csrfToken === "string") {
         return body.csrfToken;
       }
