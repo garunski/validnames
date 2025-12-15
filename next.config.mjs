@@ -35,13 +35,14 @@ const nextConfig = {
     // Content Security Policy - environment specific
     const cspDirectives = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://vercel.live",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://vercel.live https://va.vercel-scripts.com",
       "style-src 'self' 'unsafe-inline' https://rsms.me",
       "img-src 'self' data: https: blob:",
       "font-src 'self' data: https://rsms.me",
-      "connect-src 'self' https://api.resend.com https://challenges.cloudflare.com https://vercel.live",
-      "frame-src 'self' https://challenges.cloudflare.com",
-      "child-src 'self' https://challenges.cloudflare.com",
+      "connect-src 'self' https://api.resend.com https://challenges.cloudflare.com https://vercel.live https://va.vercel-scripts.com",
+      "frame-src 'self' https://challenges.cloudflare.com https://*.cloudflare.com blob: data:",
+      "child-src 'self' https://challenges.cloudflare.com https://*.cloudflare.com blob: data:",
+      "worker-src 'self' https://challenges.cloudflare.com blob:",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",
