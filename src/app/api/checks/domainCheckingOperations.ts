@@ -1,4 +1,4 @@
-import whoiser from "whoiser";
+import { whoisDomain } from "whoiser";
 import { DomainCheckResult } from "./domainCheckingTypes";
 import { whoisAnalyzer } from "./whois/whoisAnalyzer";
 import type { DomainInsights } from "./whois/whoisTypes";
@@ -14,7 +14,7 @@ export class DomainAvailabilityChecker {
       const fullDomain = `${domain}.${cleanTld}`;
 
       // Use whoiser to check domain availability via WHOIS
-      const whoisData = await whoiser(fullDomain, {
+      const whoisData = await whoisDomain(fullDomain, {
         timeout: 10000, // 10 second timeout
         follow: 1, // Only query registry server for speed
         ignorePrivacy: true, // Ignore privacy protection for availability check

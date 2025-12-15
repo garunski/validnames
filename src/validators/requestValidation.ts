@@ -19,7 +19,7 @@ export function validateSchema<T>(
     };
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const errors: FieldValidationError[] = error.errors.map((err) => ({
+      const errors: FieldValidationError[] = error.issues.map((err) => ({
         field: err.path.join("."),
         message: err.message,
         code: ERROR_CODES.VALIDATION_ERROR,
@@ -92,7 +92,7 @@ export async function validateAsync<T>(
     };
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const errors: FieldValidationError[] = error.errors.map((err) => ({
+      const errors: FieldValidationError[] = error.issues.map((err) => ({
         field: err.path.join("."),
         message: err.message,
         code: ERROR_CODES.VALIDATION_ERROR,

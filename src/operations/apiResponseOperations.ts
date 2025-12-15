@@ -15,7 +15,7 @@ export function createValidationErrorResponse(error: z.ZodError) {
   return NextResponse.json(
     {
       error: "Validation failed",
-      details: error.errors.map((e) => e.message),
+      details: error.issues.map((e) => e.message),
     },
     { status: 400 },
   );
