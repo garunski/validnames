@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback } from "react";
 import Turnstile from "react-turnstile";
 
 export interface TurnstileFieldProps {
@@ -20,25 +20,30 @@ export function TurnstileField({
   className = "",
   disabled = false,
 }: TurnstileFieldProps) {
-  const [, setIsLoaded] = useState(false);
+  const handleVerify = useCallback(
+    (token: string) => {
+      if (!disabled) {
+        onVerify(token);
+      }
+    },
+    [disabled, onVerify],
+  );
 
-  const handleVerify = (token: string) => {
-    if (!disabled) {
-      onVerify(token);
-    }
-  };
-
-  const handleExpire = () => {
+  const handleExpire = useCallback(() => {
     if (onExpire) {
       onExpire();
     }
-  };
+  }, [onExpire]);
 
-  const handleError = () => {
+  const handleError = useCallback(() => {
     if (onError) {
       onError();
     }
-  };
+  }, [onError]);
+
+  const handleLoad = useCallback(() => {
+    // Widget loaded successfully
+  }, []);
 
   return (
     <div className={`relative flex justify-center ${className}`}>
@@ -47,7 +52,7 @@ export function TurnstileField({
         onVerify={handleVerify}
         onExpire={handleExpire}
         onError={handleError}
-        onLoad={() => setIsLoaded(true)}
+        onLoad={handleLoad}
         theme="light"
         size="normal"
       />

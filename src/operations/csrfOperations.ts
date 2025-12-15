@@ -1,12 +1,18 @@
-import crypto from "crypto";
 import { cookies } from "next/headers";
 
 /**
- * Generates a cryptographically secure CSRF token
+ * Generates a cryptographically secure CSRF token using Web Crypto API
+ * Compatible with Edge Runtime (Vercel Edge Functions)
  * @returns A secure random token
  */
 export function generateCsrfToken(): string {
-  return crypto.randomBytes(32).toString("hex");
+  // Use Web Crypto API for Edge Runtime compatibility
+  // crypto is available as a global in Edge Runtime (Vercel, Cloudflare Workers, etc.)
+  const array = new Uint8Array(32);
+  globalThis.crypto.getRandomValues(array);
+  return Array.from(array, (byte) => byte.toString(16).padStart(2, "0")).join(
+    "",
+  );
 }
 
 /**
